@@ -16,6 +16,7 @@ class UsuarioRepository extends ServiceEntityRepository
         parent::__construct($registry, Usuario::class);
     }
 
+// creado por Doctrine
 //    /**
 //     * @return Usuario[] Returns an array of Usuario objects
 //     */
