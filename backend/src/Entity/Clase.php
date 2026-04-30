@@ -20,8 +20,8 @@ class Clase
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $descripcion = null;
 
-    #[ORM\Column]
-    private ?\DateTime $horario = null;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)] // Especificamos que es fecha y hora
+    private ?\DateTimeInterface $horario = null;
 
     #[ORM\Column]
     private ?int $aforoMaximo = null;
@@ -39,7 +39,6 @@ class Clase
     public function setNombre(string $nombre): static
     {
         $this->nombre = $nombre;
-
         return $this;
     }
 
@@ -51,19 +50,17 @@ class Clase
     public function setDescripcion(?string $descripcion): static
     {
         $this->descripcion = $descripcion;
-
         return $this;
     }
 
-    public function getHorario(): ?\DateTime
+    public function getHorario(): ?\DateTimeInterface
     {
         return $this->horario;
     }
 
-    public function setHorario(\DateTime $horario): static
+    public function setHorario(\DateTimeInterface $horario): static
     {
         $this->horario = $horario;
-
         return $this;
     }
 
@@ -75,7 +72,6 @@ class Clase
     public function setAforoMaximo(int $aforoMaximo): static
     {
         $this->aforoMaximo = $aforoMaximo;
-
         return $this;
     }
 }

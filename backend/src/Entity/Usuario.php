@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use App\Repository\UsuarioRepository;
 use Doctrine\ORM\Mapping as ORM;
-use phpDocumentor\Reflection\Types\Integer;
 
 #[ORM\Entity(repositoryClass: UsuarioRepository::class)]
 class Usuario
@@ -18,15 +17,15 @@ class Usuario
     private ?string $Nombre = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $contraseña = null;
+    private ?string $password = null;
 
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?Integer $edad = null;
+    #[ORM\Column(nullable: true)]
+    private ?int $edad = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(nullable: true)]
     private ?float $peso = null;
 
     public function getId(): ?int
@@ -42,19 +41,17 @@ class Usuario
     public function setNombre(string $Nombre): static
     {
         $this->Nombre = $Nombre;
-
         return $this;
     }
 
-    public function getContraseña(): ?string
+    public function getPassword(): ?string
     {
-        return $this->contraseña;
+        return $this->password;
     }
 
-    public function setContraseña(string $contraseña): static
+    public function setPassword(string $password): static
     {
-        $this->contraseña = $contraseña;
-
+        $this->password = $password;
         return $this;
     }
 
@@ -66,38 +63,28 @@ class Usuario
     public function setEmail(string $email): static
     {
         $this->email = $email;
-
         return $this;
     }
 
-    public function getEdad(): ?string
+    public function getEdad(): ?int
     {
         return $this->edad;
     }
 
-    public function setEdad(?string $edad): static
+    public function setEdad(?int $edad): static
     {
         $this->edad = $edad;
-
         return $this;
     }
 
-    public function getPeso(): ?string
+    public function getPeso(): ?float
     {
         return $this->peso;
     }
 
-    public function setPeso(?string $peso): static
+    public function setPeso(?float $peso): static
     {
         $this->peso = $peso;
-
-        return $this;
-    }
-
-    public function setId(int $id): static
-    {
-        $this->id = $id;
-
         return $this;
     }
 }
