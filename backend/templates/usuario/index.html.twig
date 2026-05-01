@@ -1,43 +1,55 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Usuario index{% endblock %}
+{% block title %}Listado de Usuarios - GymTrack{% endblock %}
 
 {% block body %}
-    <h1>Usuario index</h1>
+<style>
+    body { background-color: #000; color: #fff; font-family: 'Arial', sans-serif; padding: 20px; }
+    .table-gym { background-color: #111; color: #fff; border: 1px solid #333; border-radius: 15px; overflow: hidden; }
+    .table-gym th { color: #ff0000; text-transform: uppercase; border-bottom: 2px solid #333; padding: 15px; }
+    .table-gym td { border-bottom: 1px solid #222; padding: 15px; vertical-align: middle; }
+    .btn-action { color: #fff; text-decoration: none; font-size: 0.8rem; margin-right: 10px; border: 1px solid #444; padding: 5px 10px; border-radius: 5px; }
+    .btn-action:hover { background-color: #ff0000; border-color: #ff0000; }
+    .btn-new { background-color: #ff0000; color: #000; font-weight: bold; padding: 10px 20px; border-radius: 8px; text-decoration: none; display: inline-block; margin-bottom: 20px; text-transform: uppercase; }
+</style>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nombre</th>
-                <th>Password</th>
-                <th>Email</th>
-                <th>Edad</th>
-                <th>Peso</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for usuario in usuarios %}
-            <tr>
-                <td>{{ usuario.id }}</td>
-                <td>{{ usuario.Nombre }}</td>
-                <td>{{ usuario.password }}</td>
-                <td>{{ usuario.email }}</td>
-                <td>{{ usuario.edad }}</td>
-                <td>{{ usuario.peso }}</td>
-                <td>
-                    <a href="{{ path('app_usuario_show', {'id': usuario.id}) }}">show</a>
-                    <a href="{{ path('app_usuario_edit', {'id': usuario.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="7">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+<div class="container mt-4">
+    <h1 class="mb-4 fw-bold">Gestión de <span style="color: #ff0000;">Usuarios</span></h1>
 
-    <a href="{{ path('app_usuario_new') }}">Create new</a>
+    <a href="{{ path('app_usuario_new') }}" class="btn-new">Registrar Nuevo</a>
+
+    <div class="table-responsive">
+        <table class="table table-gym">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Edad</th>
+                    <th>Peso</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for usuario in usuarios %}
+                <tr>
+                    <td>{{ usuario.id }}</td>
+                    <td>{{ usuario.Nombre }}</td>
+                    <td>{{ usuario.email }}</td>
+                    <td>{{ usuario.edad }}</td>
+                    <td>{{ usuario.peso }}</td>
+                    <td>
+                        <a href="{{ path('app_usuario_show', {'id': usuario.id}) }}" class="btn-action">Ver</a>
+                        <a href="{{ path('app_usuario_edit', {'id': usuario.id}) }}" class="btn-action">Editar</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6" class="text-center text-muted">No hay usuarios registrados todavía</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}

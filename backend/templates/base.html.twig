@@ -2,16 +2,49 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
-
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}GymTrack - Entrenamiento Pro{% endblock %}</title>
+        
+        {# ENLACES CORREGIDOS DE BOOTSTRAP Y ICONOS #}
+        <link href="https://jsdelivr.net" rel="stylesheet">
+        <link rel="stylesheet" href="https://cloudflare.com">
+        
+        <style>
+            body { background-color: #000000; color: #ffffff; min-height: 100vh; font-family: sans-serif; }
+            .navbar-gym { background-color: #0a0a0a !important; border-bottom: 3px solid #ff0000; padding: 1rem; }
+            .navbar-brand { font-weight: 900; font-size: 1.8rem; text-decoration: none !important; }
+            .nav-link { color: #fff !important; font-weight: bold; text-transform: uppercase; margin-right: 15px; text-decoration: none; }
+            .nav-link:hover { color: #ff0000 !important; }
+            .btn-logout { border: 2px solid #ff0000; color: #ff0000; font-weight: 800; border-radius: 50px; padding: 5px 20px; text-decoration: none; transition: 0.3s; cursor: pointer; }
+            .btn-logout:hover { background-color: #ff0000; color: #000; }
+        </style>
+        {% block stylesheets %}{% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <nav class="navbar navbar-expand-lg navbar-dark navbar-gym mb-4">
+            <div class="container">
+                <a class="navbar-brand" href="{{ path('app_clase_index') }}">
+                    <span style="color: #fff;">GYM</span><span style="color: #ff0000;">TRACK</span>
+                </a>
+                <div class="d-flex align-items-center">
+                    <a class="nav-link" href="{{ path('app_clase_index') }}">Clases</a>
+                    <a class="nav-link" href="{{ path('app_usuario_index') }}">Usuarios</a>
+                    
+                    {# BOTÓN MODIFICADO CON CONFIRMACIÓN #}
+                    <a class="btn-logout ms-3" href="{{ path('app_logout') }}" 
+                       onclick="return confirm('¿Estás seguro de que quieres salir de GymTrack?')">
+                       Salir
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+            {% block body %}{% endblock %}
+        </div>
+
+        {# SCRIPTS DE BOOTSTRAP #}
+        <script src="https://jsdelivr.net"></script>
+        {% block javascripts %}{% endblock %}
     </body>
 </html>
