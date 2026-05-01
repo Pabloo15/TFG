@@ -1,121 +1,73 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Iniciar Sesión - GymTrack{% endblock %}
+{% block title %}Acceso - GymTrack{% endblock %}
 
 {% block body %}
 <style>
-    body, html {
-        height: 100%;
+    body { 
+        background: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)), 
+                    url('{{ asset('images/gym-bg.png') }}');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        display: flex; 
+        flex-direction: column;
+        align-items: center; 
+        justify-content: center; 
+        min-height: 80vh; 
         margin: 0;
-        background-color: #000000;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: 'Arial Black', Gadget, sans-serif;
     }
-
-    .brand-name {
-        font-size: 2.5rem;
-        font-weight: 900;
-        text-align: center;
-        margin-bottom: 20px;
-        text-transform: uppercase;
-        letter-spacing: -1px;
-    }
-
-    .card-gym {
-        background-color: #1a1a1b; /* Gris muy oscuro */
-        border: 2px solid #ff0000; /* Borde rojo fino */
-        border-radius: 25px; /* Bordes muy redondeados como en tu imagen */
-        width: 320px; /* Más estrecho */
-        padding: 20px;
-    }
-
-    .card-title {
-        color: #ffffff;
-        font-size: 1.4rem;
-        font-weight: bold;
-        margin-bottom: 20px;
-    }
-
-    /* Cuadros de texto más pequeños y oscuros */
-    .form-group {
-        display: flex;
-        align-items: center;
-        margin-bottom: 15px;
-    }
-
-    .form-group label {
-        color: #666;
-        font-size: 0.8rem;
-        width: 80px;
-    }
-
-    .form-control {
-        background-color: #252526 !important;
-        border: 1px solid #444 !important;
-        border-radius: 10px !important;
-        color: #fff !important;
-        font-size: 0.8rem;
-        padding: 5px 10px;
-        height: 35px; /* Altura reducida */
-    }
-
-    /* Botón rojo sólido y rectangular */
-    .btn-gym {
-        background-color: #ff0000 !important;
-        color: #000 !important;
-        border: none;
-        border-radius: 8px;
-        font-weight: 900;
-        text-transform: uppercase;
+    
+    .login-card { 
+        background-color: rgba(26, 26, 27, 0.9); 
+        border: 2px solid #ff0000; 
+        border-radius: 25px; 
         width: 100%;
-        padding: 10px;
-        margin-top: 10px;
+        max-width: 400px; 
+        padding: 40px; 
+        box-shadow: 0 10px 40px rgba(255, 0, 0, 0.25);
+        backdrop-filter: blur(8px);
+        margin-top: 20px;
     }
+    
+    .form-label-gym { color: #fff; font-weight: bold; text-transform: uppercase; font-size: 0.75rem; margin-bottom: 8px; display: block; }
+    .form-control-gym { background-color: #000 !important; border: 1px solid #444 !important; color: #fff !important; border-radius: 10px !important; padding: 12px !important; margin-bottom: 20px; }
+    .form-control-gym:focus { border-color: #ff0000 !important; box-shadow: none !important; }
+    .btn-gym-red { background-color: #ff0000; color: #000; font-weight: 900; border: none; border-radius: 10px; width: 100%; padding: 15px; text-transform: uppercase; transition: 0.3s; }
+    .btn-gym-red:hover { background-color: #fff; transform: translateY(-2px); }
 
-    .footer-links {
-        text-align: center;
-        margin-top: 15px;
-        font-size: 0.75rem;
-    }
+    .register-link-container { margin-top: 40px; text-align: center; }
+    .text-register { color: #ffffff !important; font-size: 0.9rem; text-decoration: none; }
+    .text-register b { color: #ff0000; }
 </style>
 
-<div class="login-wrapper">
-    <div class="brand-name">
-        <span style="color: #ffffff;">GYM</span><span style="color: #ff0000;">TRACK</span>
-    </div>
+<div class="login-card">
+    <form method="post">
+        <h2 class="text-center text-white fw-bold mb-4" style="letter-spacing: 2px;">INICIO <span class="text-danger">SESIÓN</span></h2>
 
-    <div class="card card-gym shadow-lg">
-        <h2 class="card-title">Acceso de Usuario</h2>
+        {% if error %}
+            <div class="alert alert-danger p-2 small text-center mb-3">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+
+        <div>
+            <label class="form-label-gym">Email o Usuario</label>
+            <input type="text" value="{{ last_username }}" name="_username" class="form-control-gym" required autofocus placeholder="Admin / Email">
+        </div>
         
-        <form method="post">
-            {% if error %}
-                <div class="alert alert-danger p-1 small" style="font-size: 0.7rem;">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-            {% endif %}
+        <div>
+            <label class="form-label-gym">Contraseña</label>
+            <input type="password" name="_password" class="form-control-gym" required placeholder="********">
+        </div>
 
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="correo@gymtrack.com" required autofocus>
-            </div>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-            <div class="form-group">
-                <label>Contraseña</label>
-                <input type="password" name="password" id="inputPassword" class="form-control" placeholder="••••••••" required>
-            </div>
-
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
-            <button class="btn btn-gym" type="submit">
-                ENTRAR AL CENTRO
-            </button>
-
-            <div class="footer-links">
-                <a href="{{ path('app_usuario_new') }}" style="color: #666; text-decoration: none;">
-                    ¿No tienes cuenta? <span style="color: #ff0000; text-decoration: underline;">Únete ahora</span>
-                </a>
-            </div>
-        </form>
-    </div>
+        <button class="btn-gym-red shadow" type="submit">Entrar al Centro</button>
+        
+        <div class="register-link-container">
+            <a href="{{ path('app_usuario_new') }}" class="text-register">
+                ¿No tienes cuenta? <b>Únete ahora</b>
+            </a>
+        </div>
+    </form>
 </div>
 {% endblock %}

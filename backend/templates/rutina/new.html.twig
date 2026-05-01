@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nueva Rutina - GymTrack{% endblock %}
+
+{% block body %}
+<style>
+    /* Contenedor principal para que no empuje al menú */
+    .main-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding-top: 50px;
+        min-height: 80vh;
+    }
+
+    .card-rutina { 
+        background-color: #111; 
+        border: 2px solid #ff0000; 
+        border-radius: 20px; 
+        width: 100%;
+        max-width: 500px; /* Tamaño controlado */
+        padding: 30px;
+        box-shadow: 0 10px 30px rgba(255, 0, 0, 0.1);
+    }
+
+    .form-label-gym { 
+        color: #888; 
+        font-size: 0.75rem; 
+        text-transform: uppercase; 
+        font-weight: 800;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .form-control-gym { 
+        background-color: #1a1a1a !important; 
+        border: 1px solid #333 !important; 
+        color: #fff !important; 
+        border-radius: 10px !important; 
+        padding: 12px !important;
+        margin-bottom: 20px;
+    }
+
+    .form-control-gym:focus {
+        border-color: #ff0000 !important;
+        box-shadow: none !important;
+    }
+
+    .btn-gym-save { 
+        background-color: #ff0000; 
+        color: #000; 
+        font-weight: 900; 
+        width: 100%; 
+        padding: 15px; 
+        border-radius: 10px; 
+        border: none; 
+        text-transform: uppercase;
+        transition: 0.3s;
+    }
+
+    .btn-gym-save:hover { 
+        background-color: #fff; 
+        transform: translateY(-2px);
+    }
+</style>
+
+<div class="main-wrapper">
+    <div class="card-rutina">
+        <h2 class="text-center text-uppercase fw-bold mb-4" style="letter-spacing: 2px;">Nueva <span class="text-danger">Rutina</span></h2>
+        
+        <form method="post">
+            <div>
+                <label class="form-label-gym">Nombre del Entrenamiento</label>
+                <input type="text" name="nombre" class="form-control form-control-gym" placeholder="Ej: Lunes - Pecho" required>
+            </div>
+            
+            <div>
+                <label class="form-label-gym">Lista de Ejercicios</label>
+                <textarea name="ejercicios" class="form-control form-control-gym" rows="6" placeholder="1. Press Banca 4x12&#10;2. Aperturas 3x15" required></textarea>
+            </div>
+            
+            <button type="submit" class="btn-gym-save shadow">Guardar Entrenamiento</button>
+            
+            <div class="text-center mt-3">
+                <a href="{{ path('app_rutina_index') }}" class="text-secondary small text-decoration-none">← Volver al listado</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

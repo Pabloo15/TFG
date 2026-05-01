@@ -42,6 +42,28 @@ final class ClaseController extends AbstractController
         ]);
     }
 
+    /* NUEVO MÉTODO PARA RESERVAR PLAZA */
+    #[Route('/{id}/reservar', name: 'app_clase_reservar', methods: ['POST'])]
+    public function reservar(Clase $clase, EntityManagerInterface $entityManager): Response
+    {
+        // Comprobamos si hay plazas libres
+        if ($clase->getAforoMaximo() > 0) {
+            // Restamos 1 al aforo actual
+            $clase->setAforoMaximo($clase->getAforoMaximo() - 1);
+            
+            // Guardamos el cambio en la base de datos
+            $entityManager->flush();
+
+            // Mensaje de éxito
+            $this->addFlash('success', '¡Genial! Has reservado tu plaza para ' . $clase->getNombre());
+        } else {
+            // Mensaje de error si está lleno
+            $this->addFlash('danger', 'Lo sentimos, no quedan plazas para esta clase.');
+        }
+
+        return $this->redirectToRoute('app_clase_index');
+    }
+
     #[Route('/{id}', name: 'app_clase_show', methods: ['GET'])]
     public function show(Clase $clase): Response
     {
