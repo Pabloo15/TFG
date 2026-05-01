@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Seleccionar Centro - GymTrack{% endblock %}
+
+{% block body %}
+<style>
+    body { background-color: #000; color: #fff; font-family: 'Arial Black', sans-serif; }
+    .gym-card { 
+        background-color: #111; 
+        border: 2px solid #333; 
+        border-radius: 25px; 
+        transition: 0.4s; 
+        cursor: pointer;
+        overflow: hidden;
+    }
+    .gym-card:hover { border-color: #ff0000; transform: translateY(-10px); }
+    .gym-img { height: 180px; background-size: cover; background-position: center; background-color: #222; }
+    
+    .btn-select { 
+        background-color: #ff0000; 
+        color: #000; 
+        font-weight: 900; 
+        border: none; 
+        border-radius: 12px; 
+        width: 100%; 
+        padding: 12px; 
+        text-transform: uppercase; 
+    }
+    
+    .gym-name { color: #fff; font-weight: 900; text-transform: uppercase; margin-top: 15px; letter-spacing: 1px; }
+</style>
+
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold text-uppercase">Selecciona tu <span style="color: #ff0000;">Sede</span></h1>
+        <p class="text-secondary">Elige el centro GymTrack donde vas a entrenar hoy</p>
+    </div>
+    
+    <div class="row g-4 justify-content-center">
+        <!-- CENTRO 1: Dinamic -->
+        <div class="col-md-4">
+            <div class="card gym-card h-100 shadow-lg" onclick="window.location.href='{{ path('app_clase_index') }}'">
+                <div class="gym-img" style="background-image: url('https://unsplash.com');"></div>
+                <div class="card-body text-center">
+                    <h2 class="h4 gym-name">DINAMIC</h2>
+                    <p class="text-secondary small mb-4">Tu centro de entrenamiento de alto rendimiento.</p>
+                    <button class="btn-select">Acceder</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- CENTRO 2: SanoFit -->
+        <div class="col-md-4">
+            <div class="card gym-card h-100 shadow-lg" onclick="window.location.href='{{ path('app_clase_index') }}'">
+                <div class="gym-img" style="background-image: url('https://unsplash.com');"></div>
+                <div class="card-body text-center">
+                    <h2 class="h4 gym-name">SANOFIT</h2>
+                    <p class="text-secondary small mb-4">Expertos en salud y bienestar físico.</p>
+                    <button class="btn-select">Acceder</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- CENTRO 3: ZafraGym -->
+        <div class="col-md-4">
+            <div class="card gym-card h-100 shadow-lg" onclick="window.location.href='{{ path('app_clase_index') }}'">
+                <div class="gym-img" style="background-image: url('https://unsplash.com');"></div>
+                <div class="card-body text-center">
+                    <h2 class="h4 gym-name">ZAFRAGYM</h2>
+                    <p class="text-secondary small mb-4">Potencia tu fuerza en nuestra sede de Zafra.</p>
+                    <button class="btn-select">Acceder</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

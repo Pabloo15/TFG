@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface; // Añadido para seguridad
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/usuario')]
@@ -23,17 +24,25 @@ final class UsuarioController extends AbstractController
     }
 
     #[Route('/new', name: 'app_usuario_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
         $usuario = new Usuario();
         $form = $this->createForm(UsuarioType::class, $usuario);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // ENCRIPTACIÓN: Antes de guardar, encriptamos la contraseña
+            $hashedPassword = $passwordHasher->hashPassword(
+                $usuario,
+                $usuario->getPassword()
+            );
+            $usuario->setPassword($hashedPassword);
+
             $entityManager->persist($usuario);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_usuario_index', [], Response::HTTP_SEE_OTHER);
+            // REDIRECCIÓN: Ahora te manda al Login de GymTrack
+            return $this->redirectToRoute('app_login', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('usuario/new.html.twig', [
@@ -51,12 +60,19 @@ final class UsuarioController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_usuario_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Usuario $usuario, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Usuario $usuario, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
         $form = $this->createForm(UsuarioType::class, $usuario);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Si cambias la contraseña al editar, también se encripta
+            $hashedPassword = $passwordHasher->hashPassword(
+                $usuario,
+                $usuario->getPassword()
+            );
+            $usuario->setPassword($hashedPassword);
+            
             $entityManager->flush();
 
             return $this->redirectToRoute('app_usuario_index', [], Response::HTTP_SEE_OTHER);

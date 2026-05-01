@@ -5,46 +5,86 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}GymTrack - Entrenamiento Pro{% endblock %}</title>
         
-        {# ENLACES CORREGIDOS DE BOOTSTRAP Y ICONOS #}
         <link href="https://jsdelivr.net" rel="stylesheet">
         <link rel="stylesheet" href="https://cloudflare.com">
         
         <style>
-            body { background-color: #000000; color: #ffffff; min-height: 100vh; font-family: sans-serif; }
-            .navbar-gym { background-color: #0a0a0a !important; border-bottom: 3px solid #ff0000; padding: 1rem; }
-            .navbar-brand { font-weight: 900; font-size: 1.8rem; text-decoration: none !important; }
-            .nav-link { color: #fff !important; font-weight: bold; text-transform: uppercase; margin-right: 15px; text-decoration: none; }
+            body { background-color: #000000; color: #ffffff; min-height: 100vh; font-family: sans-serif; margin: 0; }
+            .navbar-gym { background-color: #0a0a0a !important; border-bottom: 3px solid #ff0000; padding: 0.8rem 0; }
+            
+            .nav-link { color: #fff !important; font-weight: bold; text-transform: uppercase; text-decoration: none; font-size: 0.85rem; padding: 0 15px !important; cursor: pointer; }
             .nav-link:hover { color: #ff0000 !important; }
-            .btn-logout { border: 2px solid #ff0000; color: #ff0000; font-weight: 800; border-radius: 50px; padding: 5px 20px; text-decoration: none; transition: 0.3s; cursor: pointer; }
-            .btn-logout:hover { background-color: #ff0000; color: #000; }
+            
+            .btn-logout { border: 2px solid #ff0000; color: #ff0000 !important; font-weight: 800; border-radius: 50px; padding: 6px 20px; text-decoration: none; font-size: 0.85rem; transition: 0.3s; white-space: nowrap; }
+            .btn-logout:hover { background-color: #ff0000; color: #000 !important; }
+
+            /* Estilo del cuadro de Rutinas */
+            .modal-content { background-color: #111; border: 2px solid #ff0000; border-radius: 25px; color: #fff; }
+            .modal-header { border-bottom: 1px solid #333; }
+            .form-gym { background-color: #222 !important; border: 1px solid #444 !important; color: #fff !important; border-radius: 8px !important; }
         </style>
-        {% block stylesheets %}{% endblock %}
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg navbar-dark navbar-gym mb-4">
-            <div class="container">
-                <a class="navbar-brand" href="{{ path('app_clase_index') }}">
-                    <span style="color: #fff;">GYM</span><span style="color: #ff0000;">TRACK</span>
-                </a>
-                <div class="d-flex align-items-center">
-                    <a class="nav-link" href="{{ path('app_clase_index') }}">Clases</a>
-                    <a class="nav-link" href="{{ path('app_usuario_index') }}">Usuarios</a>
-                    
-                    {# BOTÓN MODIFICADO CON CONFIRMACIÓN #}
-                    <a class="btn-logout ms-3" href="{{ path('app_logout') }}" 
-                       onclick="return confirm('¿Estás seguro de que quieres salir de GymTrack?')">
-                       Salir
-                    </a>
+        {# SOLO SI EL USUARIO HA INICIADO SESIÓN APARECE EL MENÚ Y EL CUADRO DE RUTINAS #}
+        {% if app.user %}
+            <nav class="navbar navbar-dark navbar-gym mb-4">
+                <div class="container d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <div style="border-right: 1px solid #333; padding-right: 15px; margin-right: 15px;">
+                            <span style="color: #666; font-size: 0.6rem; text-transform: uppercase; display: block;">Socio</span>
+                            <span style="color: #ff0000; font-weight: 900; text-transform: uppercase; font-size: 1.1rem;">{{ app.user.Nombre|default('MIGUE') }}</span>
+                        </div>
+                        <a class="navbar-brand me-4 fw-bold" href="{{ path('app_clase_index') }}" style="font-size: 1.6rem; text-decoration: none;">
+                            <span style="color: #fff;">GYM</span><span style="color: #ff0000;">TRACK</span>
+                        </a>
+                        <div class="d-flex align-items-center">
+                            <a class="nav-link" href="{{ path('app_clase_index') }}">Clases</a>
+                            <a class="nav-link" style="color: #ff0000 !important;" data-bs-toggle="modal" data-bs-target="#modalRutina">Rutinas</a>
+                            <a class="nav-link" href="{{ path('app_usuario_index') }}">Usuarios</a>
+                        </div>
+                    </div>
+                    <div>
+                        <a class="btn-logout" href="{{ path('app_logout') }}" onclick="return confirm('¿Seguro que quieres salir?')">SALIR</a>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- VENTANA EMERGENTE DE RUTINAS (DENTRO DEL IF PARA QUE NO SALGA EN EL LOGIN) -->
+            <div class="modal fade" id="modalRutina" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content shadow-lg">
+                        <div class="modal-header">
+                            <h5 class="modal-title fw-bold text-uppercase">Nueva <span class="text-danger">Carpeta de Rutina</span></h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body p-4">
+                            <label style="color: #666; font-size: 0.7rem; text-transform: uppercase; font-weight: bold; margin-bottom: 5px; display: block;">Nombre de la Carpeta</label>
+                            <input type="text" class="form-control form-gym mb-4" placeholder="Ej: Lunes - Pecho">
+                            
+                            <div class="row g-2 mb-2 text-secondary small fw-bold text-center">
+                                <div class="col-6 text-start">EJERCICIO</div>
+                                <div class="col-3">PESO (KG)</div>
+                                <div class="col-3">REPETICIONES</div>
+                            </div>
+                            <div class="row g-2 mb-2">
+                                <div class="col-6"><input type="text" class="form-control form-gym" placeholder="Press Banca"></div>
+                                <div class="col-3"><input type="text" class="form-control form-gym text-center" placeholder="80"></div>
+                                <div class="col-3"><input type="text" class="form-control form-gym text-center" placeholder="4x12"></div>
+                            </div>
+                            <button class="btn btn-outline-danger btn-sm w-100 fw-bold mt-2 border-0">+ AÑADIR OTRO EJERCICIO</button>
+                        </div>
+                        <div class="modal-footer border-0">
+                            <button class="btn btn-danger w-100 py-3 fw-bold text-uppercase" style="border-radius: 12px;">Guardar Entrenamiento</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </nav>
+        {% endif %}
 
         <div class="container">
             {% block body %}{% endblock %}
         </div>
 
-        {# SCRIPTS DE BOOTSTRAP #}
         <script src="https://jsdelivr.net"></script>
-        {% block javascripts %}{% endblock %}
     </body>
 </html>

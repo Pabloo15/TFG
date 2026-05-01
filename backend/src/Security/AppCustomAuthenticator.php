@@ -48,8 +48,8 @@ class AppCustomAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        // Una vez logueado con éxito, enviamos al usuario a la lista de clases
-        return new RedirectResponse($this->urlGenerator->generate('app_clase_index'));
+        // CAMBIO: Ahora enviamos al usuario a la selección de centro
+        return new RedirectResponse($this->urlGenerator->generate('app_seleccionar_centro'));
     }
 
     protected function getLoginUrl(Request $request): string
