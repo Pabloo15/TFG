@@ -1,25 +1,13 @@
 security:
     password_hashers:
-        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'plaintext'
 
     providers:
-        # USUARIO MAESTRO FIJO (EL JEFE)
-        admin_provider:
-            memory:
-                users:
-                    # Usuario: Admin | Password: Admin
-                    Admin: { password: '$2y$13$j3E0kC.v6N1HkO5M0qVTe.XvHl.E0XGk9H7N0Z6l8f9yM2R5p6S1.', roles: ['ROLE_ADMIN'] }
-        
-        # USUARIOS DE LA BASE DE DATOS (LOS SOCIOS)
+        # Solo usamos la base de datos para evitar conflictos
         app_user_provider:
             entity:
                 class: App\Entity\Usuario
                 property: email
-
-        # UNIMOS AMBOS PROVIDERS
-        all_users:
-            chain:
-                providers: [admin_provider, app_user_provider]
 
     firewalls:
         dev:
@@ -27,7 +15,7 @@ security:
             security: false
         main:
             lazy: true
-            provider: all_users
+            provider: app_user_provider
             custom_authenticator: App\Security\AppCustomAuthenticator
             logout:
                 path: app_logout
@@ -38,9 +26,11 @@ security:
                 path: /
 
     access_control:
-        # SOLO EL ADMIN ENTRA AQUÍ
+        - { path: ^/login, roles: PUBLIC_ACCESS }
+        - { path: ^/new, roles: PUBLIC_ACCESS }
         - { path: ^/usuario, roles: ROLE_ADMIN }
         - { path: ^/clase/new, roles: ROLE_ADMIN }
         - { path: ^/clase/\d+/edit, roles: ROLE_ADMIN }
-        # EL SOCIO SOLO VE LO DEMÁS
+        - { path: ^/seleccionar-centro, roles: ROLE_USER }
+        - { path: ^/clase, roles: ROLE_USER }
         - { path: ^/, roles: ROLE_USER }

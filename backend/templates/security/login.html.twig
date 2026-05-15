@@ -51,14 +51,17 @@
 
         <div>
             <label class="form-label-gym">Email o Usuario</label>
-            <input type="text" value="{{ last_username }}" name="_username" class="form-control-gym" required autofocus placeholder="Admin / Email">
+            {# IMPORTANTE: name="email" #}
+            <input type="text" value="{{ last_username }}" name="email" class="form-control-gym" required autofocus placeholder="Admin / Email">
         </div>
         
         <div>
             <label class="form-label-gym">Contraseña</label>
-            <input type="password" name="_password" class="form-control-gym" required placeholder="********">
+            {# IMPORTANTE: name="password" #}
+            <input type="password" name="password" class="form-control-gym" required placeholder="********">
         </div>
 
+        {# Token CSRF con ID 'authenticate' #}
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
         <button class="btn-gym-red shadow" type="submit">Entrar al Centro</button>
