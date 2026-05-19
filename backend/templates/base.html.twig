@@ -2,53 +2,161 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <title>{% block title %}GymTrack{% endblock %}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{% block title %}GymTrack - Entrenamiento Pro{% endblock %}</title>
-        <link href="https://jsdelivr.net" rel="stylesheet">
+        
         <style>
-            body { background-color: #000; color: #fff; font-family: sans-serif; margin: 0; }
-            .navbar-gym { background-color: #0a0a0a !important; border-bottom: 2px solid #ff0000; padding: 0.5rem 0; }
-            .brand-gym { color: #fff; font-weight: 900; font-size: 1.5rem; text-decoration: none !important; }
-            .brand-track { color: #ff0000 !important; font-weight: 900; font-size: 1.5rem; text-decoration: none !important; }
-            .nav-link { color: #fff !important; font-weight: bold; text-transform: uppercase; font-size: 0.8rem; padding: 0 10px !important; text-decoration: none !important; }
-            .btn-logout { border: 1px solid #ff0000; color: #ff0000 !important; font-weight: 700; border-radius: 30px; padding: 3px 12px; text-decoration: none !important; font-size: 0.7rem; }
-            .user-label { color: #ff0000; font-weight: 900; text-transform: uppercase; font-size: 0.9rem; line-height: 1; }
+            /* FUENTE Y RESET */
+            @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;800&display=swap');
+            
+            body {
+                background-color: #0a0a0a;
+                margin: 0;
+                font-family: 'Inter', sans-serif;
+                -webkit-font-smoothing: antialiased;
+            }
+
+            /* MENÚ SUPERIOR PREMIUM */
+            .gym-header-nav {
+                background: linear-gradient(180deg, #111111 0%, #070707 100%);
+                border-bottom: 2px solid #ff0000;
+                padding: 18px 40px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                box-shadow: 0 4px 20px rgba(255, 0, 0, 0.05);
+            }
+
+            /* BLOQUE IZQUIERDO: BRANDING Y SOCIO */
+            .nav-left-zone {
+                display: flex;
+                flex-direction: column;
+                gap: 2px;
+            }
+
+            .user-badge {
+                font-size: 0.75rem;
+                text-transform: uppercase;
+                color: #ff4444;
+                font-weight: 800;
+                letter-spacing: 2px;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+
+            /* Texto del usuario estático y limpio */
+            .user-name-text {
+                color: #ffffff;
+                font-size: 1.2rem; 
+                font-weight: 900;
+                letter-spacing: 0.5px;
+            }
+
+            .gym-main-title {
+                font-family: 'Orbitron', sans-serif;
+                font-size: 2.4rem;
+                font-weight: 900;
+                text-transform: uppercase;
+                letter-spacing: -1px;
+                color: #ffffff;
+                margin: 0;
+                line-height: 1.1;
+            }
+            .gym-main-title span { 
+                color: #ff0000; 
+                text-shadow: 0 0 12px rgba(255, 0, 0, 0.4);
+            }
+
+            /* BLOQUE CENTRAL: NAVEGACIÓN COMPACTA */
+            .nav-center-links {
+                display: flex;
+                gap: 40px;
+            }
+            .nav-link-item {
+                color: #aaaaaa;
+                text-decoration: none;
+                font-weight: 700;
+                text-transform: uppercase;
+                font-size: 0.95rem;
+                letter-spacing: 1.5px;
+                transition: all 0.3s ease;
+                padding: 6px 0;
+                position: relative;
+            }
+            .nav-link-item::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 0;
+                height: 2px;
+                background-color: #ff0000;
+                transition: width 0.3s ease;
+            }
+            .nav-link-item:hover { 
+                color: #ffffff; 
+            }
+            .nav-link-item:hover::after {
+                width: 100%;
+            }
+
+            /* BLOQUE DERECHO: BOTÓN SALIR EQUILIBRADO */
+            .nav-right-zone {
+                display: flex;
+                align-items: center;
+            }
+            .btn-logout-header {
+                background: transparent;
+                color: #ffffff;
+                border: 2px solid #333333;
+                padding: 10px 24px;
+                border-radius: 6px; 
+                font-weight: 700;
+                text-transform: uppercase;
+                font-size: 0.8rem;
+                letter-spacing: 1px;
+                text-decoration: none;
+                transition: all 0.2s ease-in-out;
+            }
+            .btn-logout-header:hover {
+                background: #ff0000;
+                border-color: #ff0000;
+                color: #ffffff;
+                box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
+                transform: translateY(-1px);
+            }
         </style>
+        
+        {% block stylesheets %}{% endblock %}
+        {% block javascripts %}{% endblock %}
     </head>
     <body>
-        {# EL MENÚ: No aparece en el Login para que no se desconfigure #}
-        {% if app.user and app.request.attributes.get('_route') != 'app_login' %}
-            <nav class="navbar navbar-expand navbar-dark navbar-gym mb-4">
-                <div class="container d-flex align-items-center justify-content-between">
-                    <div class="d-flex align-items-center">
-                        <div style="border-right: 1px solid #333; padding-right: 15px; margin-right: 15px; display: flex; flex-direction: column;">
-                            <span style="color: #666; font-size: 0.5rem; text-transform: uppercase;">Socio</span>
-                            <span class="user-label">{{ app.user.Nombre|default('MIGUE') }}</span>
-                        </div>
-                        <a class="brand-gym" href="{{ path('app_clase_index') }}">GYM<span class="brand-track">TRACK</span></a>
-                        <div class="d-flex ms-3">
-                            <a class="nav-link" href="{{ path('app_clase_index') }}">Clases</a>
-                            <a class="nav-link" href="{{ path('app_rutina_index') }}">Rutinas</a>
-                            {% if is_granted('ROLE_ADMIN') %}
-                                <a class="nav-link" href="{{ path('app_usuario_index') }}">Usuarios</a>
-                            {% endif %}
-                        </div>
-                    </div>
-                    <a class="btn-logout" href="{{ path('app_logout') }}">SALIR</a>
+
+        <nav class="gym-header-nav">
+            <div class="nav-left-zone">
+                <div class="user-badge">
+                    ⚡ SOCIO // 
+                    <span class="user-name-text">
+                        {{ app.user.nombre|default('MIGUE')|upper }}
+                    </span>
                 </div>
-            </nav>
-        {% endif %}
-
-        {# LOGO PARA EL LOGIN: Centrado arriba #}
-        {% if app.request.attributes.get('_route') == 'app_login' %}
-            <div class="text-center mt-5" style="z-index: 10;">
-                <h1 class="brand-gym" style="font-size: 3.5rem; letter-spacing: 3px;">GYM<span class="brand-track">TRACK</span></h1>
+                <h1 class="gym-main-title">GYM<span>TRACK</span></h1>
             </div>
-        {% endif %}
 
-        <div class="container">
+            <div class="nav-center-links">
+                <a href="{{ path('app_clase_index') }}" class="nav-link-item">Clases</a>
+                <a href="{{ path('app_rutina_index') }}" class="nav-link-item">Rutinas</a>
+            </div>
+
+            <div class="nav-right-zone">
+                <a href="{{ path('app_logout') }}" class="btn-logout-header">Salir</a>
+            </div>
+        </nav>
+
+        <main>
             {% block body %}{% endblock %}
-        </div>
-        <script src="https://jsdelivr.net"></script>
+        </main>
+
     </body>
 </html>

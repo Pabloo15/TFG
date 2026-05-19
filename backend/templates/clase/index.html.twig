@@ -11,18 +11,6 @@
         font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
 
-    /* BARRA DE NAVEGACIÓN COMPACTA */
-    .gym-navbar {
-        background-color: #000;
-        border-bottom: 1px solid #222;
-        padding: 0.8rem 1.5rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .gym-logo { font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #fff; text-decoration: none; }
-    .gym-logo span { color: #ff0000; }
-
     /* CONTENEDOR PRINCIPAL REESTRUCTURADO */
     .main-container { max-width: 1100px; margin: 30px auto; padding: 0 20px; }
 
@@ -38,7 +26,7 @@
     .page-title h1 { font-size: 1.8rem; font-weight: 800; margin: 0; text-transform: uppercase; }
     .page-title p { color: #666; margin: 0; font-size: 0.9rem; }
 
-    /* CALENDARIO SEMANAL (MÁS FINO) */
+    /* CALENDARIO SEMANAL */
     .calendar-strip {
         display: flex;
         gap: 10px;
@@ -52,12 +40,27 @@
         text-align: center;
         border-radius: 8px;
         transition: 0.2s;
+        position: relative;
+        cursor: pointer;
     }
     .day-pill .name { display: block; font-size: 0.7rem; color: #555; text-transform: uppercase; font-weight: bold; }
     .day-pill .num { font-size: 1.1rem; font-weight: 700; }
     .day-pill.active { border-color: #ff0000; background: #1a0000; color: #ff0000; }
+    
+    /* Indicador de reserva en el calendario superior */
+    .day-pill.has-booking::after {
+        content: '';
+        position: absolute;
+        bottom: 6px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 6px;
+        height: 6px;
+        background-color: #ff0000;
+        border-radius: 50%;
+    }
 
-    /* FILA DE ACTIVIDAD (ESTILO LISTA PROFESIONAL) */
+    /* FILA DE ACTIVIDAD */
     .activity-row {
         background: #111;
         border: 1px solid #222;
@@ -81,8 +84,19 @@
         display: inline-block; padding: 4px 12px; border-radius: 20px; 
         background: #000; border: 1px solid #333; font-weight: 600; 
     }
+    .status-badge.booked {
+        border-color: #00ff00;
+        color: #00ff00;
+        background: #001a00;
+    }
 
-    /* BOTONES */
+    /* SISTEMA DE RESERVAS DESPLEGABLE */
+    .dropdown-reserve {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+    }
+
     .btn-reserve {
         background: #ff0000;
         color: #fff;
@@ -94,60 +108,116 @@
         font-size: 0.8rem;
         cursor: pointer;
         width: 100%;
+        text-align: center;
+        transition: 0.2s;
     }
     .btn-reserve:hover { background: #cc0000; }
     .btn-reserve:disabled { background: #222; color: #555; cursor: not-allowed; }
 
-    .btn-add {
-        background: #fff;
-        color: #000;
-        padding: 8px 20px;
+    .btn-cancel-reservation {
+        background: #222;
+        color: #ff4444;
+        border: 1px solid #444;
+        padding: 10px 20px;
         border-radius: 6px;
-        text-decoration: none;
         font-weight: 700;
+        text-transform: uppercase;
         font-size: 0.8rem;
+        cursor: pointer;
+        width: 100%;
+        text-align: center;
+        transition: 0.2s;
+    }
+    .btn-cancel-reservation:hover { background: #ff4444; color: #fff; border-color: #ff4444; }
+
+    /* Calendario Desplegable */
+    .calendar-dropdown-menu {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 110%;
+        background-color: #0a0a0a;
+        border: 1px solid #222;
+        min-width: 200px;
+        box-shadow: 0px 8px 24px rgba(0,0,0,0.7);
+        border-radius: 8px;
+        z-index: 100;
+        padding: 6px 0;
+    }
+    .calendar-dropdown-menu.show { display: block; }
+
+    .calendar-dropdown-header {
+        font-size: 0.65rem;
+        color: #555;
+        padding: 4px 14px;
+        text-transform: uppercase;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+        border-bottom: 1px solid #151515;
+        margin-bottom: 4px;
     }
 
-    /* RESPONSIVE */
+    .calendar-date-option {
+        color: #d0d0d0;
+        padding: 8px 14px;
+        text-decoration: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: 0.15s;
+    }
+    .calendar-date-option:hover { background-color: #ff0000; color: #fff; }
+    .calendar-date-option .day-num {
+        font-weight: 700;
+        background: #151515;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+    }
+    .calendar-date-option:hover .day-num { background: white; color: #ff0000; }
+
+    .btn-add { background: #fff; color: #000; padding: 8px 20px; border-radius: 6px; text-decoration: none; font-weight: 700; font-size: 0.8rem; }
+
     @media (max-width: 850px) {
-        .activity-row {
-            grid-template-columns: 1fr;
-            text-align: center;
-            gap: 15px;
-        }
+        .activity-row { grid-template-columns: 1fr; text-align: center; gap: 15px; }
+        .calendar-dropdown-menu { left: 0; right: 0; min-width: 100%; }
     }
 </style>
 
-<nav class="gym-navbar">
-    <a href="#" class="gym-logo">GYM<span>TRACK</span></a>
-    <div style="font-size: 0.8rem; font-weight: 600;">
-        <span style="color: #666">CONECTADO COMO:</span> {{ app.user.nombre|default('ADMIN') }}
-        <a href="{{ path('app_logout') }}" style="color: #ff0000; margin-left: 15px; text-decoration: none;">SALIR</a>
-    </div>
-</nav>
-
 <div class="main-container">
     
-    <!-- CALENDARIO SEMANAL -->
     <div class="calendar-strip" id="calendar">
-        <!-- Generado por JS para ser real -->
-    </div>
+        </div>
 
-    <!-- CABECERA -->
     <div class="page-header">
         <div class="page-title">
-            <h1 id="today-name">Sesiones de Hoy</h1>
-            <p id="today-full-date">Jueves, 14 de Mayo</p>
+            <h1 id="today-name">Sesiones</h1>
+            <p id="today-full-date">Selecciona un día en el calendario de arriba</p>
         </div>
         {% if is_granted('ROLE_ADMIN') %}
             <a href="{{ path('app_clase_new') }}" class="btn-add">NUEVA SESIÓN</a>
         {% endif %}
     </div>
 
-    <!-- LISTADO EN FORMATO FILA -->
     <div class="activity-list">
         {% for clase in clases %}
-            <div class="activity-row">
+            
+            {# Agrupamos todas las fechas que el usuario ha reservado para ESTA clase específica #}
+            {% set fechasReservadasDeEstaClase = [] %}
+            {% for reserva in mis_reservas|default([]) %}
+                {% if reserva.clase_id == clase.id %}
+                    {% set fechasReservadasDeEstaClase = fechasReservadasDeEstaClase|merge([reserva.fecha]) %}
+                {% endif %}
+            {% endfor %}
+
+            <div class="activity-row" 
+                 data-clase-id="{{ clase.id }}" 
+                 data-clase-nombre="{{ clase.nombre }}"
+                 data-clase-aforo="{{ clase.aforoMaximo }}"
+                 data-clase-reservas="{{ fechasReservadasDeEstaClase|json_encode }}">
+                
                 <div class="activity-time">
                     {{ clase.horario ? clase.horario|date('H:i') : '00:00' }}
                 </div>
@@ -157,24 +227,11 @@
                     <p>{{ clase.descripcion }}</p>
                 </div>
 
-                <div class="activity-status">
-                    <span class="status-badge">
-                        {{ clase.aforoMaximo }} plazas libres
-                    </span>
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <div style="margin-top: 8px;">
-                            <a href="{{ path('app_clase_edit', {'id': clase.id}) }}" style="color: #555; text-decoration: none; font-size: 0.75rem;">Editar clase</a>
-                        </div>
-                    {% endif %}
-                </div>
+                <div class="activity-status" id="status-container-{{ clase.id }}">
+                    </div>
 
-                <div class="activity-action">
-                    <form action="{{ path('app_clase_reservar', {'id': clase.id}) }}" method="post">
-                        <button type="submit" class="btn-reserve" {% if clase.aforoMaximo <= 0 %}disabled{% endif %}>
-                            {% if clase.aforoMaximo > 0 %} Reservar {% else %} Completo {% endif %}
-                        </button>
-                    </form>
-                </div>
+                <div class="activity-action" id="action-container-{{ clase.id }}">
+                    </div>
             </div>
         {% else %}
             <div style="text-align: center; padding: 50px; color: #444; border: 2px dashed #222; border-radius: 10px;">
@@ -185,30 +242,165 @@
 </div>
 
 <script>
+    const dayNamesShort = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+    const daysLong = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    
+    let fechaSeleccionadaGlobal = ''; 
+
+    function confirmarReserva(nombreClase, fecha) {
+        return confirm(`¿Estás seguro de reservar para "${nombreClase}" el día ${fecha}?`);
+    }
+
+    function confirmarCancelacion(nombreClase, fecha) {
+        return confirm(`¿Quieres cancelar tu reserva de "${nombreClase}" para el día ${fecha}? Tu plaza se liberará.`);
+    }
+
+    function toggleReserveCalendar(event, elementId) {
+        event.stopPropagation();
+        document.querySelectorAll('.calendar-dropdown-menu').forEach(menu => {
+            if (menu.id !== elementId) menu.classList.remove('show');
+        });
+        document.getElementById(elementId).classList.toggle('show');
+    }
+
+    document.addEventListener('click', function() {
+        document.querySelectorAll('.calendar-dropdown-menu').forEach(menu => {
+            menu.classList.remove('show');
+        });
+    });
+
     document.addEventListener('DOMContentLoaded', function() {
         const calendarEl = document.getElementById('calendar');
         const now = new Date();
-        const daysShort = ['DOM', 'LUN', 'MAR', 'MIE', 'JUE', 'VIE', 'SAB'];
-        const daysLong = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-        const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+        
+        fechaSeleccionadaGlobal = now.toISOString().split('T')[0];
 
-        // Títulos de hoy
-        document.getElementById('today-name').innerText = `Sesiones de ${daysLong[now.getDay()]}`;
-        document.getElementById('today-full-date').innerText = `${daysLong[now.getDay()]}, ${now.getDate()} de ${months[now.getMonth()]}`;
-
-        // Generar 7 días
+        // --- 1. GENERACIÓN DEL CALENDARIO SUPERIOR INTELIGENTE ---
         for(let i = -3; i <= 3; i++) {
             const d = new Date();
             d.setDate(now.getDate() + i);
+            const isoString = d.toISOString().split('T')[0];
             
             const pill = document.createElement('div');
             pill.className = `day-pill ${i === 0 ? 'active' : ''}`;
+            pill.setAttribute('data-fecha', isoString);
+            
+            if (verificarSiHayReservasEnFecha(isoString)) {
+                pill.classList.add('has-booking');
+            }
+
             pill.innerHTML = `
-                <span class="name">${daysShort[d.getDay()]}</span>
+                <span class="name">${daysShortName(d.getDay())}</span>
                 <span class="num">${d.getDate()}</span>
             `;
+
+            pill.addEventListener('click', function() {
+                document.querySelectorAll('.day-pill').forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
+                
+                fechaSeleccionadaGlobal = isoString;
+                actualizarTitulosCabecera(d);
+                renderizarClasesSegunFecha();
+            });
+
             calendarEl.appendChild(pill);
         }
+
+        actualizarTitulosCabecera(now);
+        renderizarClasesSegunFecha();
     });
+
+    function daysShortName(dayIndex) {
+        const days = ['DOM', 'LUN', 'MAR', 'MIE', 'JUE', 'VIE', 'SAB'];
+        return days[dayIndex];
+    }
+
+    function verificarSiHayReservasEnFecha(fechaIso) {
+        let encontrado = false;
+        document.querySelectorAll('.activity-row').forEach(row => {
+            const reservas = JSON.parse(row.getAttribute('data-clase-reservas') || '[]');
+            if (reservas.includes(fechaIso)) encontrado = true;
+        });
+        return encontrado;
+    }
+
+    function actualizarTitulosCabecera(dateObj) {
+        document.getElementById('today-name').innerText = `Sesiones del ${daysLong[dateObj.getDay()]}`;
+        document.getElementById('today-full-date').innerText = `${daysLong[dateObj.getDay()]}, ${dateObj.getDate()} de ${months[dateObj.getMonth()]} de ${dateObj.getFullYear()}`;
+    }
+
+    // --- 2. RENDERIZADO DINÁMICO DE LAS SESIONES ---
+    function renderizarClasesSegunFecha() {
+        document.querySelectorAll('.activity-row').forEach(row => {
+            const claseId = row.getAttribute('data-clase-id');
+            const nombre = row.getAttribute('data-clase-nombre');
+            const aforo = parseInt(row.getAttribute('data-clase-aforo'));
+            const reservas = JSON.parse(row.getAttribute('data-clase-reservas') || '[]');
+
+            const statusContainer = document.getElementById(`status-container-${claseId}`);
+            const actionContainer = document.getElementById(`action-container-${claseId}`);
+
+            const tieneReservaHoy = reservas.includes(fechaSeleccionadaGlobal);
+
+            if (tieneReservaHoy) {
+                statusContainer.innerHTML = `<span class="status-badge booked">✓ Reservado para este día</span>`;
+                actionContainer.innerHTML = `
+                    <form action="/clase/${claseId}/cancelar" method="post" onsubmit="return confirmarCancelacion('${nombre}', '${formatFechaHumana(fechaSeleccionadaGlobal)}')">
+                        <input type="hidden" name="fecha_reserva_cancelar" value="${fechaSeleccionadaGlobal}">
+                        <button type="submit" class="btn-cancel-reservation">Quitarme</button>
+                    </form>
+                `;
+            } else {
+                statusContainer.innerHTML = `<span class="status-badge">${aforo} plazas libres</span>`;
+                
+                if (aforo > 0) {
+                    actionContainer.innerHTML = `
+                        <div class="dropdown-reserve">
+                            <button type="button" class="btn-reserve" onclick="toggleReserveCalendar(event, 'dropdown-${claseId}')">
+                                Reservar ▼
+                            </button>
+                            <div id="dropdown-${claseId}" class="calendar-dropdown-menu">
+                                <div class="calendar-dropdown-header">Elegir día de asistencia</div>
+                            </div>
+                            <form action="/clase/${claseId}/reservar" method="post" id="form-${claseId}" onsubmit="return confirmarReserva('${nombre}', formatFechaHumana(document.getElementById('input-${claseId}').value))">
+                                <input type="hidden" name="fecha_reserva" id="input-${claseId}">
+                            </form>
+                        </div>
+                    `;
+                    
+                    const menuFlotante = document.getElementById(`dropdown-${claseId}`);
+                    for (let i = 0; i < 5; i++) {
+                        const targetDate = new Date();
+                        targetDate.setDate(targetDate.getDate() + i);
+                        const isoStr = targetDate.toISOString().split('T')[0];
+
+                        const label = i === 0 ? 'Hoy' : dayNamesShort[targetDate.getDay()];
+                        const number = targetDate.getDate();
+
+                        const option = document.createElement('div');
+                        option.className = 'calendar-date-option';
+                        option.innerHTML = `<span>${label}</span><span class="day-num">${number}</span>`;
+                        
+                        option.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            document.getElementById(`input-${claseId}`).value = isoStr;
+                            document.getElementById(`form-${claseId}`).submit();
+                        });
+
+                        menuFlotante.appendChild(option);
+                    }
+                } else {
+                    actionContainer.innerHTML = `<button class="btn-reserve" disabled>Completo</button>`;
+                }
+            }
+        });
+    }
+
+    function formatFechaHumana(isoString) {
+        if(!isoString) return '';
+        const parts = isoString.split('-');
+        return `${parts[2]}/${parts[1]}/${parts[0]}`;
+    }
 </script>
 {% endblock %}
