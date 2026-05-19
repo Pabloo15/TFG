@@ -45,7 +45,6 @@
                 gap: 6px;
             }
 
-            /* Texto del usuario estático y limpio */
             .user-name-text {
                 color: #ffffff;
                 font-size: 1.2rem; 
@@ -133,26 +132,35 @@
     </head>
     <body>
 
-        <nav class="gym-header-nav">
-            <div class="nav-left-zone">
-                <div class="user-badge">
-                    ⚡ SOCIO // 
-                    <span class="user-name-text">
-                        {{ app.user.nombre|default('MIGUE')|upper }}
-                    </span>
+        {# 🛠️ CORRECCIÓN: El menú superior SOLO se pinta si el usuario ha iniciado sesión #}
+        {% if app.user %}
+            <nav class="gym-header-nav">
+                <div class="nav-left-zone">
+                    <div class="user-badge">
+                        {# Mostramos ADMIN o SOCIO dinámicamente según sus roles #}
+                        {% if is_granted('ROLE_ADMIN') %}
+                            ⚡ ADMINISTRADOR // 
+                        {% else %}
+                            ⚡ SOCIO // 
+                        {% endif %}
+                        <span class="user-name-text">
+                            {{ app.user.nombre|default('MIGUE')|upper }}
+                        </span>
+                    </div>
+                    <h1 class="gym-main-title">GYM<span>TRACK</span></h1>
                 </div>
-                <h1 class="gym-main-title">GYM<span>TRACK</span></h1>
-            </div>
 
-            <div class="nav-center-links">
-                <a href="{{ path('app_clase_index') }}" class="nav-link-item">Clases</a>
-                <a href="{{ path('app_rutina_index') }}" class="nav-link-item">Rutinas</a>
-            </div>
+                <div class="nav-center-links">
+                    <a href="{{ path('app_clase_index') }}" class="nav-link-item">Clases</a>
+                    <a href="{{ path('app_rutina_index') }}" class="nav-link-item">Rutinas</a>
+                    <a href="{{ path('app_recetas') }}" class="nav-link-item">Nutrición</a>
+                </div>
 
-            <div class="nav-right-zone">
-                <a href="{{ path('app_logout') }}" class="btn-logout-header">Salir</a>
-            </div>
-        </nav>
+                <div class="nav-right-zone">
+                    <a href="{{ path('app_logout') }}" class="btn-logout-header">Salir</a>
+                </div>
+            </nav>
+        {% endif %}
 
         <main>
             {% block body %}{% endblock %}

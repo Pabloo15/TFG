@@ -5,8 +5,9 @@
 {% block body %}
 <style>
     body { 
-        background: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)), 
-                    url('{{ asset('images/gym-bg.png') }}');
+        /* CORREGIDO: Ruta exacta a tu archivo public/imagenes/GYMTRACK.png */
+        background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.65)), 
+                    url('{{ asset('imagenes/GYMTRACK.png') }}');
         background-size: cover;
         background-position: center;
         background-attachment: fixed;
@@ -14,50 +15,115 @@
         flex-direction: column;
         align-items: center; 
         justify-content: center; 
-        min-height: 80vh; 
+        min-height: 100vh; /* Cambiado a 100vh para que ocupe toda la pantalla y se centre perfecto */
         margin: 0;
     }
     
+    /* TARJETA EFECTO CRISTAL PREMIUM */
     .login-card { 
-        background-color: rgba(26, 26, 27, 0.9); 
+        background-color: rgba(17, 17, 17, 0.75); 
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
         border: 2px solid #ff0000; 
         border-radius: 25px; 
         width: 100%;
-        max-width: 400px; 
+        max-width: 420px; 
         padding: 40px; 
-        box-shadow: 0 10px 40px rgba(255, 0, 0, 0.25);
-        backdrop-filter: blur(8px);
-        margin-top: 20px;
+        box-shadow: 0 0 30px rgba(255, 0, 0, 0.2), inset 0 0 20px rgba(0, 0, 0, 0.6);
+        box-sizing: border-box;
     }
     
-    .form-label-gym { color: #fff; font-weight: bold; text-transform: uppercase; font-size: 0.75rem; margin-bottom: 8px; display: block; }
-    .form-control-gym { background-color: #000 !important; border: 1px solid #444 !important; color: #fff !important; border-radius: 10px !important; padding: 12px !important; margin-bottom: 20px; }
-    .form-control-gym:focus { border-color: #ff0000 !important; box-shadow: none !important; }
-    .btn-gym-red { background-color: #ff0000; color: #000; font-weight: 900; border: none; border-radius: 10px; width: 100%; padding: 15px; text-transform: uppercase; transition: 0.3s; }
-    .btn-gym-red:hover { background-color: #fff; transform: translateY(-2px); }
+    .form-label-gym { 
+        color: #fff; 
+        font-weight: 800; 
+        text-transform: uppercase; 
+        font-size: 0.8rem; 
+        margin-bottom: 8px; 
+        display: block; 
+        letter-spacing: 1px;
+    }
+    
+    .form-control-gym { 
+        background-color: rgba(0, 0, 0, 0.6) !important; 
+        border: 2px solid #333 !important; 
+        color: #fff !important; 
+        border-radius: 10px !important; 
+        padding: 14px !important; 
+        margin-bottom: 22px; 
+        width: 100%;
+        box-sizing: border-box;
+        font-family: 'Inter', sans-serif;
+        transition: all 0.3s ease;
+    }
+    
+    .form-control-gym:focus { 
+        border-color: #ffffff !important; 
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.1) !important;
+        outline: none;
+    }
+    
+    /* BOTÓN ROJO POTENTE */
+    .btn-gym-red { 
+        background-color: #ff0000; 
+        color: #fff; 
+        font-weight: 800; 
+        border: none; 
+        border-radius: 10px; 
+        width: 100%; 
+        padding: 15px; 
+        text-transform: uppercase; 
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        transition: all 0.3s ease; 
+        box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
+    }
+    
+    .btn-gym-red:hover { 
+        background-color: #ff0000;
+        transform: translateY(-2px); 
+        box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
+    }
 
-    .register-link-container { margin-top: 40px; text-align: center; }
-    .text-register { color: #ffffff !important; font-size: 0.9rem; text-decoration: none; }
-    .text-register b { color: #ff0000; }
+    .register-link-container { 
+        margin-top: 25px; 
+        text-align: center; 
+    }
+    
+    .text-register { 
+        color: #aaaaaa !important; 
+        font-size: 0.85rem; 
+        font-weight: 600;
+        text-decoration: none; 
+    }
+    
+    .text-register b { 
+        color: #ff3333; 
+        font-weight: 800;
+    }
+    
+    .text-register:hover b {
+        color: #ff0000;
+        text-decoration: underline;
+    }
 </style>
 
 <div class="login-card">
     <form method="post">
-        <h2 class="text-center text-white fw-bold mb-4" style="letter-spacing: 2px;">INICIO <span class="text-danger">SESIÓN</span></h2>
+        <h2 class="text-center text-white fw-bold mb-4" style="font-family: 'Orbitron', sans-serif; letter-spacing: 2px; font-size: 2rem; margin-top: 0; text-align: center;">INICIO <span class="text-danger" style="color: #ff0000;">SESIÓN</span></h2>
 
         {% if error %}
-            <div class="alert alert-danger p-2 small text-center mb-3">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            <div class="alert alert-danger p-2 small text-center mb-3" style="background: rgba(255,0,0,0.1); border: 1px solid #ff0000; color: #ff4444; border-radius: 6px; padding: 10px; text-align: center; margin-bottom: 15px; font-size: 0.85rem;">
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
         {% endif %}
 
         <div>
             <label class="form-label-gym">Email o Usuario</label>
-            {# IMPORTANTE: name="email" #}
             <input type="text" value="{{ last_username }}" name="email" class="form-control-gym" required autofocus placeholder="Admin / Email">
         </div>
         
         <div>
             <label class="form-label-gym">Contraseña</label>
-            {# IMPORTANTE: name="password" #}
             <input type="password" name="password" class="form-control-gym" required placeholder="********">
         </div>
 
