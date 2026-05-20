@@ -28,6 +28,10 @@ security:
     access_control:
         - { path: ^/login, roles: PUBLIC_ACCESS }
         - { path: ^/new, roles: PUBLIC_ACCESS }
+        
+        # CORRECCIÓN AQUÍ: Permitimos el acceso público a la creación de usuarios ANTES de bloquear el resto de la sección
+        - { path: ^/usuario/new, roles: PUBLIC_ACCESS }
+        
         - { path: ^/usuario, roles: ROLE_ADMIN }
         - { path: ^/clase/new, roles: ROLE_ADMIN }
         - { path: ^/clase/\d+/edit, roles: ROLE_ADMIN }

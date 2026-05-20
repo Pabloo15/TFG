@@ -26,6 +26,102 @@
     .page-title h1 { font-size: 1.8rem; font-weight: 800; margin: 0; text-transform: uppercase; }
     .page-title p { color: #666; margin: 0; font-size: 0.9rem; }
 
+    /* GRUPO DE BOTONES DE ACCIÓN */
+    .gym-btn-group {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+    }
+
+    /* BOTONES DE ADMINISTRACIÓN SUPERIORES */
+    .btn-add { 
+        background: #fff; 
+        color: #000; 
+        padding: 10px 20px; 
+        border-radius: 6px; 
+        text-decoration: none; 
+        font-weight: 700; 
+        font-size: 0.8rem;
+        transition: background 0.2s;
+    }
+    .btn-add:hover { background: #dddddd; }
+
+    .btn-gym-admin-toggle {
+        background: transparent;
+        color: #ff0000;
+        border: 2px solid #ff0000;
+        padding: 8px 18px;
+        border-radius: 6px;
+        font-weight: 800;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 0 15px rgba(255, 0, 0, 0.1);
+    }
+    .btn-gym-admin-toggle:hover {
+        background: #ff0000;
+        color: #ffffff;
+        box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
+    }
+
+    /* PANEL OCULTO CONFIDENCIAL */
+    .admin-dashboard-panel {
+        display: none;
+        background: rgba(15, 15, 15, 0.95);
+        border: 2px solid #ff0000;
+        box-shadow: 0 0 40px rgba(255, 0, 0, 0.15);
+        border-radius: 12px;
+        padding: 30px;
+        margin-bottom: 35px;
+        animation: fadeIn 0.3s ease-in-out forwards;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-8px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .admin-panel-title {
+        font-size: 1.4rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        margin-top: 0;
+        margin-bottom: 20px;
+        color: #ffffff;
+        border-bottom: 1px solid #222;
+        padding-bottom: 12px;
+    }
+    .admin-panel-title span { color: #ff0000; }
+
+    /* TABLA DE USUARIOS */
+    .gym-table-wrapper { overflow-x: auto; }
+    .gym-table { width: 100%; border-collapse: collapse; text-align: left; }
+    .gym-table th {
+        background: #111111;
+        color: #777777;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        padding: 12px 16px;
+        border-bottom: 2px solid #222222;
+    }
+    .gym-table td { padding: 14px 16px; border-bottom: 1px solid #161616; font-size: 0.9rem; }
+    .gym-table tr:hover td { background: #0b0b0b; }
+
+    .badge-class-assigned {
+        background: rgba(255, 0, 0, 0.1);
+        color: #ff0000;
+        border: 1px solid rgba(255, 0, 0, 0.25);
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        display: inline-block;
+        margin-right: 6px;
+    }
+    .badge-empty { color: #444444; font-style: italic; font-size: 0.85rem; }
+
     /* CALENDARIO SEMANAL */
     .calendar-strip {
         display: flex;
@@ -47,7 +143,6 @@
     .day-pill .num { font-size: 1.1rem; font-weight: 700; }
     .day-pill.active { border-color: #ff0000; background: #1a0000; color: #ff0000; }
     
-    /* Indicador de reserva en el calendario superior */
     .day-pill.has-booking::after {
         content: '';
         position: absolute;
@@ -75,7 +170,6 @@
     .activity-row:hover { border-color: #444; background: #151515; }
 
     .activity-time { font-size: 1.2rem; font-weight: 800; color: #fff; }
-    
     .activity-main h2 { font-size: 1.3rem; font-weight: 700; margin: 0; color: #ff0000; }
     .activity-main p { font-size: 0.9rem; color: #888; margin: 2px 0 0; }
 
@@ -90,95 +184,79 @@
         background: #001a00;
     }
 
-    /* SISTEMA DE RESERVAS DESPLEGABLE */
-    .dropdown-reserve {
-        position: relative;
-        display: inline-block;
+    /* BOTONES DE ADMINISTRACIÓN EN LA FILA */
+    .admin-actions-zone {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
         width: 100%;
     }
+    .btn-gym-edit {
+        background: #ffa500;
+        color: #fff;
+        padding: 10px 14px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        text-align: center;
+        flex: 1;
+        transition: background 0.2s;
+    }
+    .btn-gym-edit:hover { background: #cc8400; }
 
-    .btn-reserve {
+    .btn-gym-delete {
         background: #ff0000;
         color: #fff;
+        padding: 10px 14px;
         border: none;
-        padding: 10px 20px;
         border-radius: 6px;
         font-weight: 700;
         text-transform: uppercase;
         font-size: 0.8rem;
         cursor: pointer;
-        width: 100%;
-        text-align: center;
-        transition: 0.2s;
+        flex: 1;
+        transition: background 0.2s;
+    }
+    .btn-gym-delete:hover { background: #cc0000; }
+
+    /* RESERVAS SOCIOS */
+    .dropdown-reserve { position: relative; display: inline-block; width: 100%; }
+    .btn-reserve {
+        background: #ff0000; color: #fff; border: none; padding: 10px 20px;
+        border-radius: 6px; font-weight: 700; text-transform: uppercase;
+        font-size: 0.8rem; cursor: pointer; width: 100%; text-align: center; transition: 0.2s;
     }
     .btn-reserve:hover { background: #cc0000; }
     .btn-reserve:disabled { background: #222; color: #555; cursor: not-allowed; }
 
     .btn-cancel-reservation {
-        background: #222;
-        color: #ff4444;
-        border: 1px solid #444;
-        padding: 10px 20px;
-        border-radius: 6px;
-        font-weight: 700;
-        text-transform: uppercase;
-        font-size: 0.8rem;
-        cursor: pointer;
-        width: 100%;
-        text-align: center;
-        transition: 0.2s;
+        background: #222; color: #ff4444; border: 1px solid #444; padding: 10px 20px;
+        border-radius: 6px; font-weight: 700; text-transform: uppercase;
+        font-size: 0.8rem; cursor: pointer; width: 100%; text-align: center; transition: 0.2s;
     }
     .btn-cancel-reservation:hover { background: #ff4444; color: #fff; border-color: #ff4444; }
 
-    /* Calendario Desplegable */
     .calendar-dropdown-menu {
-        display: none;
-        position: absolute;
-        right: 0;
-        top: 110%;
-        background-color: #0a0a0a;
-        border: 1px solid #222;
-        min-width: 200px;
-        box-shadow: 0px 8px 24px rgba(0,0,0,0.7);
-        border-radius: 8px;
-        z-index: 100;
-        padding: 6px 0;
+        display: none; position: absolute; right: 0; top: 110%;
+        background-color: #0a0a0a; border: 1px solid #222; min-width: 200px;
+        box-shadow: 0px 8px 24px rgba(0,0,0,0.7); border-radius: 8px; z-index: 100; padding: 6px 0;
     }
     .calendar-dropdown-menu.show { display: block; }
-
     .calendar-dropdown-header {
-        font-size: 0.65rem;
-        color: #555;
-        padding: 4px 14px;
-        text-transform: uppercase;
-        font-weight: 800;
-        letter-spacing: 0.5px;
-        border-bottom: 1px solid #151515;
-        margin-bottom: 4px;
+        font-size: 0.65rem; color: #555; padding: 4px 14px;
+        text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;
+        border-bottom: 1px solid #151515; margin-bottom: 4px;
     }
 
     .calendar-date-option {
-        color: #d0d0d0;
-        padding: 8px 14px;
-        text-decoration: none;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 0.8rem;
-        cursor: pointer;
-        transition: 0.15s;
+        color: #d0d0d0; padding: 8px 14px; text-decoration: none;
+        display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; cursor: pointer;
     }
     .calendar-date-option:hover { background-color: #ff0000; color: #fff; }
-    .calendar-date-option .day-num {
-        font-weight: 700;
-        background: #151515;
-        padding: 2px 6px;
-        border-radius: 4px;
-        font-size: 0.75rem;
-    }
+    .calendar-date-option .day-num { font-weight: 700; background: #151515; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; }
     .calendar-date-option:hover .day-num { background: white; color: #ff0000; }
-
-    .btn-add { background: #fff; color: #000; padding: 8px 20px; border-radius: 6px; text-decoration: none; font-weight: 700; font-size: 0.8rem; }
 
     @media (max-width: 850px) {
         .activity-row { grid-template-columns: 1fr; text-align: center; gap: 15px; }
@@ -188,23 +266,73 @@
 
 <div class="main-container">
     
-    <div class="calendar-strip" id="calendar">
-        </div>
+    <div class="calendar-strip" id="calendar"></div>
 
     <div class="page-header">
         <div class="page-title">
             <h1 id="today-name">Sesiones</h1>
             <p id="today-full-date">Selecciona un día en el calendario de arriba</p>
         </div>
-        {% if is_granted('ROLE_ADMIN') %}
-            <a href="{{ path('app_clase_new') }}" class="btn-add">NUEVA SESIÓN</a>
-        {% endif %}
+        
+        <div class="gym-btn-group">
+            {# 🔐 FILTRO ADMIN: Botón de gestión exclusivo #}
+            {% if is_granted('ROLE_ADMIN') %}
+                <button class="btn-gym-admin-toggle" onclick="toggleAdminPanel()">
+                    👥 Control Usuarios
+                </button>
+                <a href="{{ path('app_clase_new') }}" class="btn-add">NUEVA SESIÓN</a>
+            {% endif %}
+        </div>
     </div>
+
+    {# 🔐 FILTRO ADMIN: Estructura del panel de control confidencial #}
+    {% if is_granted('ROLE_ADMIN') %}
+        <div id="adminPanel" class="admin-dashboard-panel">
+            <div class="admin-panel-title">
+                Control Global de Usuarios y <span>Suscripciones</span>
+            </div>
+            
+            <div class="gym-table-wrapper">
+                <table class="gym-table">
+                    <thead>
+                        <tr>
+                            <th>Usuario / Alumno</th>
+                            <th>Email de Contacto</th>
+                            <th>Clases en las que está Inscrito</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>José García Martínez</strong></td>
+                            <td>jose@gmail.com</td>
+                            <td>
+                                <span class="badge-class-assigned">Pilates (20:00)</span>
+                                <span class="badge-class-assigned">Spinning (18:00)</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>María Rodriguez Ruiz</strong></td>
+                            <td>maria.rr@hotmail.com</td>
+                            <td>
+                                <span class="badge-class-assigned">Yoga (21:00)</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Carlos Soler Ortiz</strong></td>
+                            <td>carlossoler@gmail.com</td>
+                            <td>
+                                <span class="badge-class-assigned">MMA (18:00)</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endif %}
 
     <div class="activity-list">
         {% for clase in clases %}
             
-            {# Agrupamos todas las fechas que el usuario ha reservado para ESTA clase específica #}
             {% set fechasReservadasDeEstaClase = [] %}
             {% for reserva in mis_reservas|default([]) %}
                 {% if reserva.clase_id == clase.id %}
@@ -227,11 +355,21 @@
                     <p>{{ clase.descripcion }}</p>
                 </div>
 
-                <div class="activity-status" id="status-container-{{ clase.id }}">
-                    </div>
+                <div class="activity-status" id="status-container-{{ clase.id }}"></div>
 
                 <div class="activity-action" id="action-container-{{ clase.id }}">
-                    </div>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <div class="admin-actions-zone">
+                            <a href="{{ path('app_clase_edit', {'id': clase.id}) }}" class="btn-gym-edit">
+                                Editar ⚙️
+                            </a>
+                            <form method="post" action="{{ path('app_clase_delete', {'id': clase.id}) }}" onsubmit="return confirm('¿Seguro que quieres borrar la clase de {{ clase.nombre }}?');" style="display: inline; flex: 1;">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ clase.id) }}">
+                                <button type="submit" class="btn-gym-delete">Eliminar 🗑️</button>
+                            </form>
+                        </div>
+                    {% endif %}
+                </div>
             </div>
         {% else %}
             <div style="text-align: center; padding: 50px; color: #444; border: 2px dashed #222; border-radius: 10px;">
@@ -247,6 +385,15 @@
     const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
     
     let fechaSeleccionadaGlobal = ''; 
+    const IS_ADMIN = {{ is_granted('ROLE_ADMIN') ? 'true' : 'false' }};
+
+    // Función interactiva para el botón de control de usuarios
+    function toggleAdminPanel() {
+        const panel = document.getElementById('adminPanel');
+        if (panel) {
+            panel.style.display = (panel.style.display === 'block') ? 'none' : 'block';
+        }
+    }
 
     function confirmarReserva(nombreClase, fecha) {
         return confirm(`¿Estás seguro de reservar para "${nombreClase}" el día ${fecha}?`);
@@ -261,7 +408,8 @@
         document.querySelectorAll('.calendar-dropdown-menu').forEach(menu => {
             if (menu.id !== elementId) menu.classList.remove('show');
         });
-        document.getElementById(elementId).classList.toggle('show');
+        const currentMenu = document.getElementById(elementId);
+        if (currentMenu) currentMenu.classList.toggle('show');
     }
 
     document.addEventListener('click', function() {
@@ -276,14 +424,14 @@
         
         fechaSeleccionadaGlobal = now.toISOString().split('T')[0];
 
-        // --- 1. GENERACIÓN DEL CALENDARIO SUPERIOR INTELIGENTE ---
         for(let i = -3; i <= 3; i++) {
             const d = new Date();
             d.setDate(now.getDate() + i);
             const isoString = d.toISOString().split('T')[0];
             
             const pill = document.createElement('div');
-            pill.className = `day-pill ${i === 0 ? 'active' : ''}`;
+            const esHoy = i === 0;
+            pill.className = `day-pill ${esHoy ? 'active' : ''}`;
             pill.setAttribute('data-fecha', isoString);
             
             if (verificarSiHayReservasEnFecha(isoString)) {
@@ -304,7 +452,7 @@
                 renderizarClasesSegunFecha();
             });
 
-            calendarEl.appendChild(pill);
+            if (calendarEl) calendarEl.appendChild(pill);
         }
 
         actualizarTitulosCabecera(now);
@@ -326,11 +474,12 @@
     }
 
     function actualizarTitulosCabecera(dateObj) {
-        document.getElementById('today-name').innerText = `Sesiones del ${daysLong[dateObj.getDay()]}`;
-        document.getElementById('today-full-date').innerText = `${daysLong[dateObj.getDay()]}, ${dateObj.getDate()} de ${months[dateObj.getMonth()]} de ${dateObj.getFullYear()}`;
+        const titleEl = document.getElementById('today-name');
+        const subtitleEl = document.getElementById('today-full-date');
+        if (titleEl) titleEl.innerText = `Sesiones del ${daysLong[dateObj.getDay()]}`;
+        if (subtitleEl) subtitleEl.innerText = `${daysLong[dateObj.getDay()]}, ${dateObj.getDate()} de ${months[dateObj.getMonth()]} de ${dateObj.getFullYear()}`;
     }
 
-    // --- 2. RENDERIZADO DINÁMICO DE LAS SESIONES ---
     function renderizarClasesSegunFecha() {
         document.querySelectorAll('.activity-row').forEach(row => {
             const claseId = row.getAttribute('data-clase-id');
@@ -343,55 +492,66 @@
 
             const tieneReservaHoy = reservas.includes(fechaSeleccionadaGlobal);
 
-            if (tieneReservaHoy) {
-                statusContainer.innerHTML = `<span class="status-badge booked">✓ Reservado para este día</span>`;
-                actionContainer.innerHTML = `
-                    <form action="/clase/${claseId}/cancelar" method="post" onsubmit="return confirmarCancelacion('${nombre}', '${formatFechaHumana(fechaSeleccionadaGlobal)}')">
-                        <input type="hidden" name="fecha_reserva_cancelar" value="${fechaSeleccionadaGlobal}">
-                        <button type="submit" class="btn-cancel-reservation">Quitarme</button>
-                    </form>
-                `;
-            } else {
-                statusContainer.innerHTML = `<span class="status-badge">${aforo} plazas libres</span>`;
-                
-                if (aforo > 0) {
-                    actionContainer.innerHTML = `
-                        <div class="dropdown-reserve">
-                            <button type="button" class="btn-reserve" onclick="toggleReserveCalendar(event, 'dropdown-${claseId}')">
-                                Reservar ▼
-                            </button>
-                            <div id="dropdown-${claseId}" class="calendar-dropdown-menu">
-                                <div class="calendar-dropdown-header">Elegir día de asistencia</div>
-                            </div>
-                            <form action="/clase/${claseId}/reservar" method="post" id="form-${claseId}" onsubmit="return confirmarReserva('${nombre}', formatFechaHumana(document.getElementById('input-${claseId}').value))">
-                                <input type="hidden" name="fecha_reserva" id="input-${claseId}">
-                            </form>
-                        </div>
-                    `;
-                    
-                    const menuFlotante = document.getElementById(`dropdown-${claseId}`);
-                    for (let i = 0; i < 5; i++) {
-                        const targetDate = new Date();
-                        targetDate.setDate(targetDate.getDate() + i);
-                        const isoStr = targetDate.toISOString().split('T')[0];
-
-                        const label = i === 0 ? 'Hoy' : dayNamesShort[targetDate.getDay()];
-                        const number = targetDate.getDate();
-
-                        const option = document.createElement('div');
-                        option.className = 'calendar-date-option';
-                        option.innerHTML = `<span>${label}</span><span class="day-num">${number}</span>`;
-                        
-                        option.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            document.getElementById(`input-${claseId}`).value = isoStr;
-                            document.getElementById(`form-${claseId}`).submit();
-                        });
-
-                        menuFlotante.appendChild(option);
-                    }
+            if (statusContainer) {
+                if (tieneReservaHoy) {
+                    statusContainer.innerHTML = `<span class="status-badge booked">✓ Reservado para este día</span>`;
                 } else {
-                    actionContainer.innerHTML = `<button class="btn-reserve" disabled>Completo</button>`;
+                    statusContainer.innerHTML = `<span class="status-badge">${aforo} plazas libres</span>`;
+                }
+            }
+
+            if (IS_ADMIN) return;
+
+            if (actionContainer) {
+                if (tieneReservaHoy) {
+                    actionContainer.innerHTML = `
+                        <form action="/clase/${claseId}/cancelar" method="post" onsubmit="return confirmarCancelacion('${nombre}', '${formatFechaHumana(fechaSeleccionadaGlobal)}')">
+                            <input type="hidden" name="fecha_reserva_cancelar" value="${fechaSeleccionadaGlobal}">
+                            <button type="submit" class="btn-cancel-reservation">Quitarme</button>
+                        </form>
+                    `;
+                } else {
+                    if (aforo > 0) {
+                        actionContainer.innerHTML = `
+                            <div class="dropdown-reserve">
+                                <button type="button" class="btn-reserve" onclick="toggleReserveCalendar(event, 'dropdown-${claseId}')">
+                                    Reservar ▼
+                                </button>
+                                <div id="dropdown-${claseId}" class="calendar-dropdown-menu">
+                                    <div class="calendar-dropdown-header">Elegir día de asistencia</div>
+                                </div>
+                                <form action="/clase/${claseId}/reservar" method="post" id="form-${claseId}" onsubmit="return confirmarReserva('${nombre}', formatFechaHumana(document.getElementById('input-${claseId}').value))">
+                                    <input type="hidden" name="fecha_reserva" id="input-${claseId}">
+                                </form>
+                            </div>
+                        `;
+                        
+                        const menuFlotante = document.getElementById(`dropdown-${claseId}`);
+                        if (menuFlotante) {
+                            for (let i = 0; i < 5; i++) {
+                                const targetDate = new Date();
+                                targetDate.setDate(targetDate.getDate() + i);
+                                const isoStr = targetDate.toISOString().split('T')[0];
+
+                                const label = i === 0 ? 'Hoy' : dayNamesShort[targetDate.getDay()];
+                                const number = targetDate.getDate();
+
+                                const option = document.createElement('div');
+                                option.className = 'calendar-date-option';
+                                option.innerHTML = `<span>${label}</span><span class="day-num">${number}</span>`;
+                                
+                                option.addEventListener('click', function(e) {
+                                    e.stopPropagation();
+                                    document.getElementById(`input-${claseId}`).value = isoStr;
+                                    document.getElementById(`form-${claseId}`).submit();
+                                });
+
+                                menuFlotante.appendChild(option);
+                            }
+                        }
+                    } else {
+                        actionContainer.innerHTML = `<button class="btn-reserve" disabled>Completo</button>`;
+                    }
                 }
             }
         });

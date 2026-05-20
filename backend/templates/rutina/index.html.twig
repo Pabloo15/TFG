@@ -4,172 +4,114 @@
 
 {% block body %}
 <style>
-    /* BASE E IDENTIDAD VISUAL */
-    body { 
-        background-color: #0f0f0f; 
-        color: #e0e0e0; 
-        font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    .rutina-container {
+        padding: 40px; 
+        max-width: 1200px; 
+        margin: 0 auto; 
+        background-color: #0a0a0a; 
+        color: #fff; 
+        font-family: 'Inter', sans-serif;
     }
 
-    /* NAVEGACIÓN (Consistente con Clases) */
-    .gym-navbar {
-        background-color: #000;
-        border-bottom: 1px solid #222;
-        padding: 0.8rem 1.5rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .gym-logo { font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #fff; text-decoration: none; }
-    .gym-logo span { color: #ff0000; }
-
-    .main-container { max-width: 1100px; margin: 30px auto; padding: 0 20px; }
-
-    /* CABECERA DE PÁGINA */
-    .page-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-end;
-        margin-bottom: 40px;
-        padding-bottom: 15px;
-        border-bottom: 2px solid #1a1a1a;
-    }
-    .page-title h1 { font-size: 1.8rem; font-weight: 800; margin: 0; text-transform: uppercase; }
-    .page-title p { color: #666; margin: 0; font-size: 0.9rem; }
-
-    /* BOTONES */
-    .btn-add {
-        background: #fff;
-        color: #000;
-        padding: 8px 20px;
-        border-radius: 6px;
-        text-decoration: none;
-        font-weight: 700;
-        font-size: 0.8rem;
-        transition: 0.3s;
-    }
-    .btn-add:hover { background: #ff0000; color: #fff; }
-
-    .btn-action {
-        background: #1a1a1a;
-        color: #fff;
-        border: 1px solid #333;
-        padding: 8px 15px;
-        border-radius: 6px;
-        font-weight: 700;
-        text-transform: uppercase;
-        font-size: 0.75rem;
-        text-decoration: none;
-        display: inline-block;
-        transition: 0.2s;
-    }
-    .btn-action:hover { border-color: #ff0000; color: #ff0000; }
-
-    /* FILA DE RUTINA (ESTILO PROFESIONAL) */
-    .rutina-row {
-        background: #111;
-        border: 1px solid #222;
-        border-radius: 12px;
-        margin-bottom: 20px;
-        padding: 0;
-        overflow: hidden;
-        transition: border-color 0.3s;
-    }
-    .rutina-row:hover { border-color: #444; }
-
-    .rutina-top {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 15px 25px;
-        background: #151515;
-        border-bottom: 1px solid #222;
-    }
-    .rutina-top h2 { font-size: 1.2rem; font-weight: 800; margin: 0; color: #ff0000; text-transform: uppercase; }
-    
-    .badge-pro {
-        font-size: 0.65rem;
-        padding: 3px 10px;
-        background: #000;
-        border: 1px solid #ff0000;
-        color: #ff0000;
-        border-radius: 4px;
-        font-weight: 800;
+    .rutina-grid {
+        display: grid; 
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); 
+        gap: 30px;
     }
 
-    /* CONTENEDOR DE EJERCICIOS */
-    .ejercicios-body {
-        padding: 20px 25px;
+    .rutina-card {
+        background: rgba(20, 20, 20, 0.6); 
+        border: 1px solid #222; 
+        border-radius: 12px; 
+        padding: 25px; 
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3); 
+        display: flex; 
+        flex-direction: column; 
+        justify-content: space-between; 
+        position: relative;
+        transition: all 0.3s ease;
     }
+    .rutina-card:hover {
+        border-color: #ff0000;
+        box-shadow: 0 0 15px rgba(255, 0, 0, 0.15);
+    }
+
     .ejercicios-content {
-        background-color: #0a0a0a;
-        padding: 15px;
-        border-radius: 8px;
-        color: #aaa;
-        font-size: 0.95rem;
-        line-height: 1.6;
-        white-space: pre-line;
-        border-left: 3px solid #333;
-    }
-
-    .rutina-footer {
-        padding: 12px 25px;
-        background: #111;
-        display: flex;
-        justify-content: flex-end;
-        gap: 10px;
-    }
-
-    /* RESPONSIVE */
-    @media (max-width: 600px) {
-        .rutina-top { flex-direction: column; align-items: flex-start; gap: 10px; }
-        .page-header { flex-direction: column; align-items: flex-start; gap: 20px; }
+        color: #ddd; 
+        font-size: 1rem; 
+        line-height: 1.6; 
+        margin-bottom: 20px; 
+        white-space: pre-line; 
+        background: rgba(0,0,0,0.4); 
+        padding: 15px; 
+        border-radius: 8px; 
+        border-left: 3px solid #ff0000;
     }
 </style>
 
-<nav class="gym-navbar">
-    <a href="#" class="gym-logo">GYM<span>TRACK</span></a>
-    <div style="font-size: 0.8rem; font-weight: 600;">
-        <span style="color: #666">CONECTADO COMO:</span> {{ app.user.nombre|default('ADMIN') }}
-        <a href="{{ path('app_logout') }}" style="color: #ff0000; margin-left: 15px; text-decoration: none;">SALIR</a>
-    </div>
-</nav>
-
-<div class="main-container">
-
-    <div class="page-header">
-        <div class="page-title">
-            <h1>Mis <span class="text-danger">Rutinas</span></h1>
-            <p>Gestiona tus planes de entrenamiento personalizados</p>
+<div class="rutina-container">
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ff0000; padding-bottom: 15px; margin-bottom: 30px;">
+        <div>
+            <h1 style="font-family: 'Orbitron', sans-serif; font-size: 2.2rem; font-weight: 900; text-transform: uppercase; margin: 0; letter-spacing: 1px;">
+                ZONA DE ENTRENAMIENTO // <span style="color: #ff0000;">MIS RUTINAS</span>
+            </h1>
+            <p style="color: #666; margin: 5px 0 0 0; text-transform: uppercase; font-size: 0.85rem; font-weight: 600; letter-spacing: 0.5px;">
+                Optimiza tus entrenamientos con planes personalizados
+            </p>
         </div>
-        <a href="{{ path('app_rutina_new') }}" class="btn-add">+ NUEVA RUTINA</a>
+
+        {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('app_rutina_new') }}" style="background: #ff0000; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 6px; font-weight: 800; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px; box-shadow: 0 0 15px rgba(255, 0, 0, 0.4); transition: all 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 0 25px rgba(255,0,0,0.7)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 0 15px rgba(255, 0, 0, 0.4)';">
+                + Nueva Rutina
+            </a>
+        {% endif %}
     </div>
 
-    <div class="rutina-list">
-        {% for rutina in rutinas %}
-            <div class="rutina-row shadow-sm">
-                <div class="rutina-top">
-                    <h2>{{ rutina.nombre }}</h2>
-                    <span class="badge-pro">GYMTRACK PRO</span>
-                </div>
+    <div class="rutina-grid">
+        {% if rutinas is not empty %}
+            {% for rutina in rutinas %}
+                <div class="rutina-card">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <span style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; border: 1px solid #ff0000; color: #ff0000; letter-spacing: 0.5px;">
+                                GYMTRACK PRO
+                            </span>
+                        </div>
 
-                <div class="ejercicios-body">
-                    <div class="ejercicios-content">
-                        {{ rutina.ejercicios|trim }}
+                        <h3 style="font-family: 'Orbitron', sans-serif; font-size: 1.5rem; font-weight: 900; margin: 0 0 15px 0; color: #fff; text-transform: uppercase;">
+                            {{ rutina.nombre }}
+                        </h3>
+
+                        <h4 style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; color: #666; margin: 0 0 10px 0; letter-spacing: 0.5px;">
+                            Ejercicios Asignados:
+                        </h4>
+                        
+                        <div class="ejercicios-content">
+                            {{ rutina.ejercicios|nl2br }}
+                            
+                        </div>
+                    </div>
+
+                    <div>
+                        <div style="border-top: 1px solid #222; padding-top: 15px; display: flex; justify-content: flex-end; align-items: center;">
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <a href="{{ path('app_rutina_edit', {'id': rutina.id}) }}" style="color: #ffffff; background: rgba(255,255,255,0.05); border: 1px solid #333; text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.8rem; text-transform: uppercase; font-weight: 700; transition: all 0.2s;" onmouseover="this.style.borderColor='#ff0000'; this.style.color='#ff0000';" onmouseout="this.style.borderColor='#333'; this.style.color='#fff';">
+                                    Editar
+                                </a>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
-
-                <div class="rutina-footer">
-                    <a href="{{ path('app_rutina_edit', {'id': rutina.id}) }}" class="btn-action">Editar</a>
-                    {# Opcional: Agregar botón de eliminar si tienes la ruta #}
-                </div>
-            </div>
+            {% endfor %}
         {% else %}
-            <div style="text-align: center; padding: 60px; color: #444; border: 2px dashed #222; border-radius: 12px;">
+            <div style="grid-column: 1 / -1; text-align: center; padding: 60px; color: #444; border: 2px dashed #222; border-radius: 12px; font-weight: 600; text-transform: uppercase; font-size: 0.9rem;">
                 <p style="margin-bottom: 20px;">Todavía no has creado ninguna rutina de entrenamiento.</p>
-                <a href="{{ path('app_rutina_new') }}" style="color: #ff0000; font-weight: 700; text-decoration: none;">Comenzar ahora →</a>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('app_rutina_new') }}" style="color: #ff0000; font-weight: 700; text-decoration: none; letter-spacing: 0.5px;">Comenzar ahora →</a>
+                {% endif %}
             </div>
-        {% endfor %}
+        {% endif %}
     </div>
 </div>
 {% endblock %}

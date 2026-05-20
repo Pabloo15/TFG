@@ -25,6 +25,7 @@
                 justify-content: space-between;
                 align-items: center;
                 box-shadow: 0 4px 20px rgba(255, 0, 0, 0.05);
+                box-sizing: border-box;
             }
 
             /* BLOQUE IZQUIERDO: BRANDING Y SOCIO */
@@ -132,19 +133,24 @@
     </head>
     <body>
 
-        {# 🛠️ CORRECCIÓN: El menú superior SOLO se pinta si el usuario ha iniciado sesión #}
-        {% if app.user %}
+        {# 
+           🛠️ FILTRO DEFINITIVO: 
+           Pintamos el menú SOLO si el usuario está logueado Y ADEMÁS la ruta actual del navegador
+           NO es la de login ('app_login') ni la de registro de usuarios (habitualmente 'app_usuario_new' o similar).
+        #}
+        {% set ruta_actual = app.request.attributes.get('_route') %}
+        
+        {% if app.user and ruta_actual != 'app_login' and 'usuario_new' not in ruta_actual and 'register' not in ruta_actual %}
             <nav class="gym-header-nav">
                 <div class="nav-left-zone">
                     <div class="user-badge">
-                        {# Mostramos ADMIN o SOCIO dinámicamente según sus roles #}
                         {% if is_granted('ROLE_ADMIN') %}
                             ⚡ ADMINISTRADOR // 
                         {% else %}
                             ⚡ SOCIO // 
                         {% endif %}
                         <span class="user-name-text">
-                            {{ app.user.nombre|default('MIGUE')|upper }}
+                            {{ app.user.userIdentifier|split('@')[0]|default('MIGUE')|upper }}
                         </span>
                     </div>
                     <h1 class="gym-main-title">GYM<span>TRACK</span></h1>
@@ -152,7 +158,7 @@
 
                 <div class="nav-center-links">
                     <a href="{{ path('app_clase_index') }}" class="nav-link-item">Clases</a>
-                    <a href="{{ path('app_rutina_index') }}" class="nav-link-item">Rutinas</a>
+                    <a href="{{ path('app_rutinas') }}" class="nav-link-item">Rutinas</a>
                     <a href="{{ path('app_recetas') }}" class="nav-link-item">Nutrición</a>
                 </div>
 

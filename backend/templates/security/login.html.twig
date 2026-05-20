@@ -5,7 +5,6 @@
 {% block body %}
 <style>
     body { 
-        /* CORREGIDO: Ruta exacta a tu archivo public/imagenes/GYMTRACK.png */
         background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.65)), 
                     url('{{ asset('imagenes/GYMTRACK.png') }}');
         background-size: cover;
@@ -15,11 +14,10 @@
         flex-direction: column;
         align-items: center; 
         justify-content: center; 
-        min-height: 100vh; /* Cambiado a 100vh para que ocupe toda la pantalla y se centre perfecto */
+        min-height: 100vh;
         margin: 0;
     }
     
-    /* TARJETA EFECTO CRISTAL PREMIUM */
     .login-card { 
         background-color: rgba(17, 17, 17, 0.75); 
         backdrop-filter: blur(12px);
@@ -31,6 +29,7 @@
         padding: 40px; 
         box-shadow: 0 0 30px rgba(255, 0, 0, 0.2), inset 0 0 20px rgba(0, 0, 0, 0.6);
         box-sizing: border-box;
+        position: relative;
     }
     
     .form-label-gym { 
@@ -62,7 +61,6 @@
         outline: none;
     }
     
-    /* BOTÓN ROJO POTENTE */
     .btn-gym-red { 
         background-color: #ff0000; 
         color: #fff; 
@@ -87,6 +85,8 @@
     .register-link-container { 
         margin-top: 25px; 
         text-align: center; 
+        position: relative;
+        z-index: 9999; /* Eleva el contenedor para evitar capas fantasmas */
     }
     
     .text-register { 
@@ -94,6 +94,8 @@
         font-size: 0.85rem; 
         font-weight: 600;
         text-decoration: none; 
+        display: inline-block;
+        cursor: pointer !important;
     }
     
     .text-register b { 
@@ -127,16 +129,17 @@
             <input type="password" name="password" class="form-control-gym" required placeholder="********">
         </div>
 
-        {# Token CSRF con ID 'authenticate' #}
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
         <button class="btn-gym-red shadow" type="submit">Entrar al Centro</button>
-        
-        <div class="register-link-container">
-            <a href="{{ path('app_usuario_new') }}" class="text-register">
-                ¿No tienes cuenta? <b>Únete ahora</b>
-            </a>
-        </div>
     </form>
+
+    <div class="register-link-container">
+        <a href="{{ path('app_usuario_new') }}" 
+           onclick="window.location.href='{{ path('app_usuario_new') }}'; return false;" 
+           class="text-register">
+            ¿No tienes cuenta? <b>Únete ahora</b>
+        </a>
+    </div>
 </div>
 {% endblock %}

@@ -4,150 +4,185 @@
 
 {% block body %}
 <style>
-    /* BASE E IDENTIDAD VISUAL (Consistente) */
-    body { background-color: #0f0f0f; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; }
-    .gym-navbar { background-color: #000; border-bottom: 1px solid #222; padding: 0.8rem 1.5rem; display: flex; justify-content: space-between; align-items: center; }
-    .gym-logo { font-weight: 800; text-transform: uppercase; color: #fff; text-decoration: none; }
-    .gym-logo span { color: #ff0000; }
-    .main-container { max-width: 900px; margin: 30px auto; padding: 0 20px; }
-
-    /* CABECERA */
-    .page-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 2px solid #1a1a1a; }
-    .page-title h1 { font-size: 1.8rem; font-weight: 800; margin: 0; text-transform: uppercase; }
-
-    /* FORMULARIO ESTILIZADO */
-    .form-section { background: #111; border: 1px solid #222; border-radius: 12px; padding: 25px; margin-bottom: 25px; }
-    .form-label { color: #ff0000; font-weight: 700; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; }
-    .gym-input { background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 6px; padding: 12px; width: 100%; transition: 0.3s; }
-    .gym-input:focus { border-color: #ff0000; outline: none; box-shadow: 0 0 10px rgba(255,0,0,0.1); }
-
-    /* CREADOR DE EJERCICIOS */
-    .exercise-builder { background: #151515; padding: 20px; border-radius: 10px; border: 1px dashed #333; margin-top: 15px; }
-    .builder-row { display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 10px; }
-
-    /* LISTA DINÁMICA */
-    .exercise-list { margin-top: 20px; }
-    .exercise-item { 
-        background: #0a0a0a; border: 1px solid #222; padding: 12px 20px; border-radius: 8px; 
-        margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;
-        border-left: 4px solid #ff0000;
+    .main-wrapper {
+        display: flex; justify-content: center; align-items: flex-start;
+        padding: 50px 20px; min-height: 80vh; font-family: 'Inter', sans-serif; background-color: #0a0a0a;
     }
-    .exercise-info { font-weight: 600; }
-    .exercise-meta { color: #666; font-size: 0.9rem; margin-left: 10px; }
+    .card-rutina { 
+        background-color: #111; border: 1px solid #222; border-radius: 12px; 
+        width: 100%; max-width: 750px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+    .form-group { margin-bottom: 25px; }
+    .form-group label {
+        display: block; font-size: 0.8rem; text-transform: uppercase;
+        color: #ffffff; font-weight: 700; margin-bottom: 8px; letter-spacing: 1px;
+    }
+    .form-input-gym {
+        width: 100%; padding: 12px; background: #000; border: 1px solid #444;
+        border-radius: 8px; color: #fff; font-family: 'Inter', sans-serif; box-sizing: border-box;
+    }
+    .form-input-gym:focus { border-color: #ff0000; outline: none; }
 
-    /* BOTONES */
-    .btn-gym-red { background: #ff0000; color: #fff; border: none; padding: 10px 25px; border-radius: 6px; font-weight: 700; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
-    .btn-gym-red:hover { background: #cc0000; transform: translateY(-2px); }
-    .btn-gym-outline { background: transparent; color: #fff; border: 1px solid #333; padding: 10px 25px; border-radius: 6px; font-weight: 700; text-decoration: none; transition: 0.2s; }
-    .btn-gym-outline:hover { border-color: #ff0000; color: #ff0000; }
-    .btn-delete { color: #ff0000; background: none; border: none; cursor: pointer; font-size: 1.2rem; }
+    .ejercicio-block {
+        background: rgba(20, 20, 20, 0.8); border: 1px solid #222;
+        padding: 20px; border-radius: 10px; margin-bottom: 20px; position: relative;
+    }
+    .ejercicio-header {
+        display: flex; gap: 15px; margin-bottom: 15px; align-items: center;
+    }
+
+    .series-container { margin-left: 20px; }
+    .serie-row {
+        display: flex; gap: 10px; align-items: center; margin-bottom: 8px;
+    }
+    .serie-label {
+        color: #666; font-size: 0.8rem; font-weight: bold; min-width: 60px; text-transform: uppercase;
+    }
+
+    .btn-gym-save { 
+        background-color: #ff0000; color: #fff; font-weight: 800; width: 100%; padding: 14px; 
+        border-radius: 6px; border: none; text-transform: uppercase; font-size: 0.85rem;
+        cursor: pointer; box-shadow: 0 0 10px rgba(255,0,0,0.3); transition: 0.2s ease; margin-top: 15px;
+    }
+    .btn-gym-save:hover { transform: translateY(-2px); box-shadow: 0 0 20px rgba(255,0,0,0.6); }
+
+    .btn-add-ejer {
+        background: transparent; color: #fff; border: 1px dashed #444; padding: 12px;
+        width: 100%; border-radius: 6px; cursor: pointer; font-weight: 700; text-transform: uppercase; font-size: 0.8rem;
+    }
+    .btn-add-ejer:hover { border-color: #ff0000; color: #ff0000; background: rgba(255,0,0,0.05); }
+
+    .btn-add-serie {
+        background: #222; color: #aaa; border: 1px solid #333; padding: 6px 12px;
+        border-radius: 4px; cursor: pointer; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-top: 5px;
+    }
+    .btn-add-serie:hover { background: #ff0000; color: #fff; border-color: #ff0000; }
+
+    .btn-delete {
+        background: #1a1a1a; color: #555; border: none; padding: 10px 14px; border-radius: 6px; cursor: pointer; font-weight: bold;
+    }
+    .btn-delete:hover { background: #ff0000; color: #fff; }
 </style>
 
-<nav class="gym-navbar">
-    <a href="{{ path('app_rutina_index') }}" class="gym-logo">GYM<span>TRACK</span></a>
-    <div style="font-size: 0.8rem; font-weight: 600;">
-        <a href="{{ path('app_rutina_index') }}" style="color: #666; text-decoration: none;">VOLVER AL LISTADO</a>
-    </div>
-</nav>
+<div class="main-wrapper">
+    <div class="card-rutina">
+        <h2 style="font-family: 'Orbitron', sans-serif; color: #ffffff; font-size: 1.6rem; text-transform: uppercase; margin-top: 0; margin-bottom: 25px; border-bottom: 2px solid #ff0000; padding-bottom: 10px; letter-spacing: 1px; text-align: center;">
+            Modificar // <span style="color: #ff0000;">Editar Rutina</span>
+        </h2>
+        
+        <form method="post">
+            <div class="form-group">
+                <label>Nombre del Bloque / Grupo Muscular</label>
+                <input type="text" name="nombre" class="form-input-gym" value="{{ rutina.nombre }}" required placeholder="Ej: Pecho Intensidad">
+            </div>
 
-<div class="main-container">
-    <div class="page-header">
-        <div class="page-title">
-            <h1>Editar <span class="text-danger">Plan</span></h1>
-            <p>Modificando: {{ rutina.nombre }}</p>
-        </div>
-    </div>
+            <div class="form-group">
+                <label>Ejercicios y Configuración de Series</label>
+                <div id="ejercicios-wrapper">
+                    
+                    {% for e_idx, ejer in ejercicios_array %}
+                        <div class="ejercicio-block" data-ejer-index="{{ e_idx }}">
+                            <div class="ejercicio-header">
+                                <div style="flex: 1;">
+                                    <input type="text" name="ejercicios[{{ e_idx }}][nombre]" class="form-input-gym" value="{{ ejer.nombre }}" placeholder="Nombre del ejercicio (Ej: Press Banca)" required>
+                                </div>
+                                <button type="button" class="btn-delete" onclick="this.closest('.ejercicio-block').remove()">✕ Eliminar</button>
+                            </div>
 
-    <form method="post" id="rutina-form">
-        <!-- Nombre de la Rutina -->
-        <div class="form-section">
-            <label class="form-label">Nombre de la Rutina</label>
-            <input type="text" name="nombre" value="{{ rutina.nombre }}" class="gym-input mt-2" required placeholder="Ej: Empuje - Hipertrofia">
-        </div>
+                            <div class="series-container">
+                                {% for s_idx, serie in ejer.series %}
+                                    <div class="serie-row">
+                                        <span class="serie-label">Serie {{ s_idx + 1 }}</span>
+                                        <input type="number" name="ejercicios[{{ e_idx }}][series][{{ s_idx }}][reps]" class="form-input-gym" style="max-width: 100px;" value="{{ serie.reps }}" placeholder="Reps" min="1" required>
+                                        <span style="color: #444; font-weight: bold;">Reps</span>
+                                        
+                                        <input type="text" name="ejercicios[{{ e_idx }}][series][{{ s_idx }}][kilos]" class="form-input-gym" style="max-width: 100px;" value="{{ serie.kilos }}" placeholder="Peso" required>
+                                        <span style="color: #444; font-weight: bold;">kg</span>
+                                        
+                                        <button type="button" class="btn-delete" style="padding: 6px 10px; font-size: 0.75rem;" onclick="removeSerie(this)">✕</button>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <button type="button" class="btn-add-serie" onclick="addSerie(this)">+ Añadir Serie</button>
+                        </div>
+                    {% endfor %}
 
-        <!-- Constructor de Ejercicios -->
-        <div class="form-section">
-            <label class="form-label">Planificación de Ejercicios</label>
-            
-            <div class="exercise-builder mt-3">
-                <div class="builder-row">
-                    <input type="text" id="ex-name" class="gym-input" placeholder="Nombre del ejercicio">
-                    <input type="number" id="ex-series" class="gym-input" placeholder="Series">
-                    <input type="number" id="ex-reps" class="gym-input" placeholder="Reps">
-                    <button type="button" onclick="addExercise()" class="btn-gym-red">+</button>
                 </div>
+                
+                <button type="button" class="btn-add-ejer" onclick="addEjercicio()">+ Agregar Nuevo Ejercicio</button>
             </div>
-
-            <!-- Lista de ejercicios añadidos -->
-            <div id="exercise-list-container" class="exercise-list">
-                <!-- Se rellena con JS -->
+            
+            <button type="submit" class="btn-gym-save">Actualizar Entrenamiento</button>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="{{ path('app_rutinas') }}" style="color: #aaa; text-decoration: none; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+                    ← Volver al listado
+                </a>
             </div>
-
-            <!-- Campo oculto donde guardaremos el texto final para la DB -->
-            <input type="hidden" name="ejercicios" id="final-ejercicios-value">
-        </div>
-
-        <div class="d-flex gap-3">
-            <button type="submit" class="btn-gym-red">Actualizar Rutina</button>
-            <a href="{{ path('app_rutina_index') }}" class="btn-gym-outline">Cancelar</a>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>
 
 <script>
-    // Recuperamos los ejercicios actuales de la base de datos
-    // Asumimos que están separados por saltos de línea
-    let exercises = `{{ rutina.ejercicios|raw }}`.split('\n').filter(line => line.trim() !== "");
-    
-    const listContainer = document.getElementById('exercise-list-container');
-    const finalInput = document.getElementById('final-ejercicios-value');
+let ejerCounter = {{ ejercicios_array|length }};
 
-    // Función para renderizar la lista
-    function renderExercises() {
-        listContainer.innerHTML = '';
-        exercises.forEach((ex, index) => {
-            const div = document.createElement('div');
-            div.className = 'exercise-item';
-            div.innerHTML = `
-                <div>
-                    <span class="exercise-info">${ex}</span>
-                </div>
-                <button type="button" onclick="removeExercise(${index})" class="btn-delete">×</button>
-            `;
-            listContainer.appendChild(div);
+function addEjercicio() {
+    const wrapper = document.getElementById('ejercicios-wrapper');
+    const div = document.createElement('div');
+    div.className = 'ejercicio-block';
+    div.setAttribute('data-ejer-index', ejerCounter);
+    div.innerHTML = `
+        <div class="ejercicio-header">
+            <div style="flex: 1;">
+                <input type="text" name="ejercicios[${ejerCounter}][nombre]" class="form-input-gym" placeholder="Nombre del ejercicio" required>
+            </div>
+            <button type="button" class="btn-delete" onclick="this.closest('.ejercicio-block').remove()">✕ Eliminar</button>
+        </div>
+        <div class="series-container">
+            <div class="serie-row">
+                <span class="serie-label">Serie 1</span>
+                <input type="number" name="ejercicios[${ejerCounter}][series][0][reps]" class="form-input-gym" style="max-width: 100px;" value="12" placeholder="Reps" min="1" required>
+                <span style="color: #444; font-weight: bold;">Reps</span>
+                <input type="text" name="ejercicios[${ejerCounter}][series][0][kilos]" class="form-input-gym" style="max-width: 100px;" value="20" placeholder="Peso" required>
+                <span style="color: #444; font-weight: bold;">kg</span>
+                <button type="button" class="btn-delete" style="padding: 6px 10px; font-size: 0.75rem;" onclick="removeSerie(this)">✕</button>
+            </div>
+        </div>
+        <button type="button" class="btn-add-serie" onclick="addSerie(this)">+ Añadir Serie</button>
+    `;
+    wrapper.appendChild(div);
+    ejerCounter++;
+}
+
+function addSerie(button) {
+    const block = button.closest('.ejercicio-block');
+    const ejerIndex = block.getAttribute('data-ejer-index');
+    const container = block.querySelector('.series-container');
+    const currentSeriesCount = container.children.length;
+
+    const div = document.createElement('div');
+    div.className = 'serie-row';
+    div.innerHTML = `
+        <span class="serie-label">Serie ${currentSeriesCount + 1}</span>
+        <input type="number" name="ejercicios[${ejerIndex}][series][${currentSeriesCount}][reps]" class="form-input-gym" style="max-width: 100px;" value="10" placeholder="Reps" min="1" required>
+        <span style="color: #444; font-weight: bold;">Reps</span>
+        <input type="text" name="ejercicios[${ejerIndex}][series][${currentSeriesCount}][kilos]" class="form-input-gym" style="max-width: 100px;" value="20" placeholder="Peso" required>
+        <span style="color: #444; font-weight: bold;">kg</span>
+        <button type="button" class="btn-delete" style="padding: 6px 10px; font-size: 0.75rem;" onclick="removeSerie(this)">✕</button>
+    `;
+    container.appendChild(div);
+}
+
+function removeSerie(button) {
+    const container = button.closest('.series-container');
+    if (container.children.length > 1) {
+        button.closest('.serie-row').remove();
+        Array.from(container.children).forEach((row, index) => {
+            row.querySelector('.serie-label').textContent = `Serie ${index + 1}`;
         });
-        // Actualizamos el input oculto que se envía al servidor
-        finalInput.value = exercises.join('\n');
+    } else {
+        alert('El ejercicio debe conservar al menos 1 serie.');
     }
-
-    // Función para añadir ejercicio
-    function addExercise() {
-        const name = document.getElementById('ex-name').value;
-        const series = document.getElementById('ex-series').value;
-        const reps = document.getElementById('ex-reps').value;
-
-        if(name && series && reps) {
-            const exerciseString = `${name} - ${series} series x ${reps} reps`;
-            exercises.push(exerciseString);
-            
-            // Limpiar campos
-            document.getElementById('ex-name').value = '';
-            document.getElementById('ex-series').value = '';
-            document.getElementById('ex-reps').value = '';
-            
-            renderExercises();
-        } else {
-            alert("Por favor, rellena todos los campos del ejercicio");
-        }
-    }
-
-    // Función para eliminar
-    function removeExercise(index) {
-        exercises.splice(index, 1);
-        renderExercises();
-    }
-
-    // Render inicial
-    renderExercises();
+}
 </script>
 {% endblock %}

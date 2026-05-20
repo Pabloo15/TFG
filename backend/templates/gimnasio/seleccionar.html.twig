@@ -5,69 +5,113 @@
 {% block body %}
 <style>
     body { background-color: #000; color: #fff; font-family: 'Arial Black', sans-serif; }
+    
+    /* TARJETA GLOBAL CONTENEDORA: Más estilizada y con padding interno */
     .gym-card { 
-        background-color: #111; 
-        border: 2px solid #333; 
-        border-radius: 25px; 
-        transition: 0.4s; 
+        background-color: #0c0c0c; 
+        border: 1px solid #222; 
+        border-radius: 20px; 
+        transition: all 0.3s ease; 
         cursor: pointer;
         overflow: hidden;
+        padding: 15px; /* Espacio interno para que nada toque los bordes */
     }
-    .gym-card:hover { border-color: #ff0000; transform: translateY(-10px); }
-    .gym-img { height: 180px; background-size: cover; background-position: center; background-color: #222; }
+    .gym-card:hover { 
+        border-color: #ff0000; 
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(255, 0, 0, 0.1);
+    }
     
-    .btn-select { 
-        background-color: #ff0000; 
-        color: #000; 
+    /* RECUADRO DE LA IMAGEN: Logo más chico, centrado y estilizado */
+    .gym-img { 
+        height: 160px; 
+        background-size: 55%; /* Al bajar este porcentaje, el logo se vuelve más chico */
+        background-position: center; 
+        background-repeat: no-repeat;
+        background-color: #000; /* Fondo negro puro para fundirse con tus logos */
+        border-radius: 12px; /* Esquinas redondeadas propias dentro de la tarjeta */
+        margin-bottom: 15px;
+    }
+    
+    /* Ajuste especial para Dinamic si necesitas que ocupe un pelo más */
+    .img-dinamic { background-size: 75%; }
+    /* Ajuste especial para Zafragym si es muy redondo */
+    .img-zafra { background-size: 50%; }
+    
+    /* TITULARES Y TEXTOS */
+    .gym-name { 
+        color: #fff; 
         font-weight: 900; 
-        border: none; 
-        border-radius: 12px; 
-        width: 100%; 
-        padding: 12px; 
         text-transform: uppercase; 
+        font-size: 1.4rem; 
+        margin-top: 5px;
+        margin-bottom: 5px;
+        letter-spacing: 0.5px; 
+    }
+    .gym-desc {
+        color: #777;
+        font-family: 'sans-serif';
+        font-weight: normal;
+        font-size: 0.85rem;
+        min-height: 40px; /* Evita que las tarjetas se des cuadren si un texto es más largo */
+        margin-bottom: 15px;
     }
     
-    .gym-name { color: #fff; font-weight: 900; text-transform: uppercase; margin-top: 15px; letter-spacing: 1px; }
+    /* BOTÓN PERFECTAMENTE ENCUADRADO Y ESTILIZADO */
+    .btn-select { 
+        background-color: #ffffff; 
+        color: #000000; 
+        font-weight: 900; 
+        border: 1.5px solid #ff0000; 
+        border-radius: 10px; 
+        width: 100%; 
+        padding: 10px 0; 
+        text-transform: uppercase;
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+        transition: 0.2s ease;
+    }
+    .gym-card:hover .btn-select {
+        background-color: #ff0000;
+        color: #ffffff;
+    }
 </style>
 
 <div class="container mt-5">
     <div class="text-center mb-5">
         <h1 class="display-4 fw-bold text-uppercase">Selecciona tu <span style="color: #ff0000;">Sede</span></h1>
-        <p class="text-secondary">Elige el centro GymTrack donde vas a entrenar hoy</p>
+        <p class="text-secondary" style="font-family: sans-serif;">Elige el centro GymTrack donde vas a entrenar hoy</p>
     </div>
     
     <div class="row g-4 justify-content-center">
-        <!-- CENTRO 1: Dinamic -->
         <div class="col-md-4">
             <div class="card gym-card h-100 shadow-lg" onclick="window.location.href='{{ path('app_clase_index') }}'">
-                <div class="gym-img" style="background-image: url('https://unsplash.com');"></div>
-                <div class="card-body text-center">
-                    <h2 class="h4 gym-name">DINAMIC</h2>
-                    <p class="text-secondary small mb-4">Tu centro de entrenamiento de alto rendimiento.</p>
+                <div class="gym-img img-dinamic" style="background-image: url('{{ asset('imagenes/Dinamic.jpg') }}');"></div>
+                <div class="card-body text-center p-0">
+                    <h2 class="gym-name">DINAMIC</h2>
+                    <p class="gym-desc">Tu centro de entrenamiento de alto rendimiento.</p>
                     <button class="btn-select">Acceder</button>
                 </div>
             </div>
         </div>
 
-        <!-- CENTRO 2: SanoFit -->
         <div class="col-md-4">
             <div class="card gym-card h-100 shadow-lg" onclick="window.location.href='{{ path('app_clase_index') }}'">
-                <div class="gym-img" style="background-image: url('https://unsplash.com');"></div>
-                <div class="card-body text-center">
-                    <h2 class="h4 gym-name">SANOFIT</h2>
-                    <p class="text-secondary small mb-4">Expertos en salud y bienestar físico.</p>
+                <div class="gym-img" style="background-image: url('{{ asset('imagenes/sano-zafra.jpg') }}');"></div>
+                <div class="card-body text-center p-0">
+                    <h2 class="gym-name">SANOFIT</h2>
+                    <p class="gym-desc">Expertos en salud y bienestar físico.</p>
                     <button class="btn-select">Acceder</button>
                 </div>
             </div>
         </div>
 
-        <!-- CENTRO 3: ZafraGym -->
         <div class="col-md-4">
             <div class="card gym-card h-100 shadow-lg" onclick="window.location.href='{{ path('app_clase_index') }}'">
-                <div class="gym-img" style="background-image: url('https://unsplash.com');"></div>
-                <div class="card-body text-center">
-                    <h2 class="h4 gym-name">ZAFRAGYM</h2>
-                    <p class="text-secondary small mb-4">Potencia tu fuerza en nuestra sede de Zafra.</p>
+                <div class="gym-img img-zafra" style="background-image: url('{{ asset('imagenes/Zafragym.jpg') }}');"></div>
+                <div class="card-body text-center p-0">
+                    <h2 class="gym-name">ZAFRAGYM</h2>
+                    <p class="gym-desc">Potencia tu fuerza en nuestra sede de Zafra.</p>
                     <button class="btn-select">Acceder</button>
                 </div>
             </div>

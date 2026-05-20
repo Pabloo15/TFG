@@ -1,13 +1,184 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Clase{% endblock %}
+{% block title %}Panel de Control - GymTrack{% endblock %}
 
 {% block body %}
-    <h1>Edit Clase</h1>
+<style>
+    body {
+        background-color: #0a0a0a;
+        color: #ffffff;
+        font-family: 'Inter', 'Segoe UI', sans-serif;
+    }
 
-    {{ include('clase/_form.html.twig', {'button_label': 'Update'}) }}
+    .edit-page-container {
+        max-width: 1100px;
+        margin: 40px auto;
+        padding: 0 20px;
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* Dividimos la pantalla en dos columnas: Izquierda Formulario, Derecha Alumnos */
+        gap: 30px;
+    }
 
-    <a href="{{ path('app_clase_index') }}">back to list</a>
+    @media (max-width: 900px) {
+        .edit-page-container { grid-template-columns: 1fr; }
+    }
 
-    {{ include('clase/_delete_form.html.twig') }}
+    /* TARJETAS ESTILO GYMTRACK */
+    .gym-card-edit, .gym-card-stats {
+        background: rgba(15, 15, 15, 0.75);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 2px solid #ff0000;
+        box-shadow: 0 0 30px rgba(255, 0, 0, 0.1);
+        border-radius: 16px;
+        padding: 35px;
+        box-sizing: border-box;
+        height: fit-content;
+    }
+
+    /* CONTADOR GLOBAL DE ALUMNOS (DESTACADO) */
+    .total-students-badge {
+        grid-column: 1 / -1; /* Ocupa todo el ancho arriba */
+        background: #111;
+        border: 1px solid #222;
+        padding: 20px 30px;
+        border-radius: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .total-students-badge h3 { margin: 0; font-size: 1.1rem; text-transform: uppercase; color: #888; letter-spacing: 1px; }
+    .total-students-badge .count { font-size: 2rem; font-weight: 900; color: #ff0000; text-shadow: 0 0 10px rgba(255,0,0,0.3); }
+
+    .card-edit-header h1 {
+        font-size: 1.8rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        margin: 0 0 20px 0;
+    }
+    .card-edit-header h1 span { color: #ff0000; }
+
+    /* FORMULARIOS */
+    .form-group-gym {
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+    .form-group-gym label { color: #aaa; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+    
+    .form-group-gym input, .form-group-gym textarea {
+        width: 100% !important; background-color: #050505 !important; border: 1px solid #222 !important;
+        border-radius: 8px !important; padding: 12px 16px !important; color: #fff !important;
+        box-sizing: border-box !important;
+    }
+    .form-group-gym input:focus, .form-group-gym textarea:focus { border-color: #ff0000 !important; outline: none; }
+
+    .gym-btn-submit {
+        background: #ff0000; color: #fff; width: 100%; border: none; padding: 14px;
+        border-radius: 8px; font-size: 0.95rem; font-weight: 800; text-transform: uppercase;
+        cursor: pointer; transition: 0.2s; margin-top: 10px;
+    }
+    .gym-btn-submit:hover { background: #cc0000; box-shadow: 0 0 15px rgba(255, 0, 0, 0.3); }
+
+    /* LISTA DE ALUMNOS INSCRITOS */
+    .student-list {
+        margin-top: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+    .student-item {
+        background: #050505;
+        border: 1px solid #222;
+        padding: 12px 18px;
+        border-radius: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: border-color 0.2s;
+    }
+    .student-item:hover { border-color: #444; }
+    .student-info .name { font-weight: 700; color: #fff; block: max-width; }
+    .student-info .email { font-size: 0.8rem; color: #666; }
+    
+    .no-students {
+        text-align: center; color: #444; padding: 30px;
+        border: 2px dashed #222; border-radius: 8px; font-weight: 600;
+    }
+
+    .card-footer-actions {
+        margin-top: 30px; padding-top: 20px; border-top: 1px solid #1a1a1a;
+        display: flex; justify-content: space-between; align-items: center;
+    }
+    .btn-gym-back { color: #888; text-decoration: none; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; }
+    .btn-gym-back:hover { color: #fff; }
+</style>
+
+<div class="edit-page-container">
+    
+    {# 1. CONTADOR TOTAL DE ALUMNOS DEL GIMNASIO #}
+    <div class="total-students-badge">
+        <h3>Alumnos totales registrados en GymTrack</h3>
+        <span class="count">{{ total_alumnos_global|default(0) }}</span>
+    </div>
+
+    {# COLUMNA IZQUIERDA: FORMULARIO DE EDICIÓN #}
+    <div class="gym-card-edit">
+        <div class="card-edit-header">
+            <h1>Editar <span>Sesión</span></h1>
+        </div>
+
+        {{ form_start(form) }}
+            <div class="form-group-gym">
+                <label>Nombre de la Actividad</label>
+                {{ form_widget(form.nombre) }}
+            </div>
+            <div class="form-group-gym">
+                <label>Descripción / Detalles</label>
+                {{ form_widget(form.descripcion) }}
+            </div>
+            <div class="form-group-gym">
+                <label>Horario</label>
+                {{ form_widget(form.horario) }}
+            </div>
+            <div class="form-group-gym">
+                <label>Aforo Máximo</label>
+                {{ form_widget(form.aforoMaximo) }}
+            </div>
+            <button type="submit" class="gym-btn-submit">Guardar Cambios ⚡</button>
+        {{ form_end(form) }}
+
+        <div class="card-footer-actions">
+            <a href="{{ path('app_clase_index') }}" class="btn-gym-back">← Volver</a>
+            {{ include('clase/_delete_form.html.twig', {'button_class': 'btn-gym-danger-action'}) }}
+        </div>
+    </div>
+
+    {# COLUMNA DERECHA: ALUMNOS METIDOS EN ESTA CLASE #}
+    <div class="gym-card-stats">
+        <div class="card-edit-header">
+            <h1>Alumnos <span>Inscritos</span></h1>
+        </div>
+
+        <div class="student-list">
+            {# Recorremos los alumnos vinculados dinámicamente desde el controlador #}
+            {% for alumno in alumnos_en_clase|default([]) %}
+                <div class="student-item">
+                    <div class="student-info">
+                        <div class="name">👤 {{ alumno.nombre }}</div>
+                        <div class="email">{{ alumno.email }}</div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="no-students">
+                    No hay ningún alumno apuntado a esta sesión todavía.
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
 {% endblock %}

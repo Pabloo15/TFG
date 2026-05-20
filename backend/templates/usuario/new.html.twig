@@ -5,13 +5,20 @@
 {% block body %}
 <style>
     body, html {
-        height: 100%;
+        min-height: 100vh;
         margin: 0;
-        background-color: #000000;
+        /* Fondo con el degradado y la imagen de GymTrack unificados */
+        background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.65)), 
+                    url('{{ asset('imagenes/GYMTRACK.png') }}');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
         display: flex;
         align-items: center;
         justify-content: center;
         font-family: 'Arial Black', Gadget, sans-serif;
+        padding: 30px 0;
+        box-sizing: border-box;
     }
 
     .register-wrapper {
@@ -27,71 +34,154 @@
         text-align: center;
         margin-bottom: 20px;
         text-transform: uppercase;
+        letter-spacing: 2px;
     }
 
+    /* TARJETA EFECTO CRISTAL TEMPLADO PREMIUM */
     .card-gym {
-        background-color: #1a1a1b;
+        background-color: rgba(17, 17, 17, 0.75); 
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
         border: 2px solid #ff0000;
         border-radius: 25px;
-        width: 350px; 
-        padding: 30px;
+        width: 100%;
+        max-width: 440px; 
+        padding: 40px;
+        box-shadow: 0 0 30px rgba(255, 0, 0, 0.2), inset 0 0 20px rgba(0, 0, 0, 0.6);
+        box-sizing: border-box;
     }
 
     .card-title {
         color: #ffffff;
-        font-size: 1.4rem;
-        font-weight: bold;
-        margin-bottom: 25px;
+        font-size: 1.8rem;
+        font-weight: 900;
+        margin-bottom: 30px;
         text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
 
-    /* Contenedor de cada campo */
-    form div {
-        margin-bottom: 15px;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+    /* Contenedor estándar de campos de Symfony (form_row) */
+    form > div {
+        margin-bottom: 20px !important;
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
     }
 
+    /* Estilización global de etiquetas generadas */
     form label {
-        color: #666;
-        font-size: 0.75rem;
-        margin-bottom: 5px;
-        text-align: center;
-        width: 100%;
-        display: block;
+        color: #ffffff !important;
+        font-size: 0.8rem !important;
+        font-weight: 800 !important;
+        margin-bottom: 8px !important;
+        text-transform: uppercase !important;
+        letter-spacing: 1px !important;
+        width: 100% !important;
+        display: block !important;
+        text-align: left !important;
     }
 
-    form input {
-        background-color: #252526 !important;
-        border: 1px solid #444 !important;
+    /* Estilización premium de inputs, cajas de texto y selectores */
+    form input, form select {
+        background-color: rgba(0, 0, 0, 0.6) !important;
+        border: 2px solid #333 !important;
         border-radius: 10px !important;
         color: #fff !important;
-        font-size: 0.9rem;
-        padding: 8px;
-        height: 40px;
-        width: 280px; /* Tamaño fijo para asegurar que se vean */
-        text-align: center;
+        font-size: 0.95rem !important;
+        padding: 12px 14px !important;
+        height: auto !important; 
+        width: 100% !important; 
+        box-sizing: border-box !important;
+        transition: all 0.3s ease !important;
+        font-family: 'sans-serif' !important;
     }
 
+    form input:focus, form select:focus {
+        border-color: #ffffff !important;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.1) !important;
+        outline: none !important;
+    }
+
+    /* Diseño específico para los selectores desplegables */
+    form select {
+        cursor: pointer;
+        appearance: none;
+        -webkit-appearance: none;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%23fff'><polygon points='0,0 10,0 5,5'/></svg>");
+        background-repeat: no-repeat;
+        background-position: right 15px center;
+    }
+
+    form select option {
+        background-color: #111 !important;
+        color: #fff !important;
+    }
+
+    /* Estilo limpio para casillas Checkbox */
+    form input[type="checkbox"] {
+        width: 18px !important;
+        height: 18px !important;
+        accent-color: #ff0000 !important;
+        cursor: pointer !important;
+        display: inline-block !important;
+        margin: 0 12px 0 0 !important;
+    }
+
+    /* Ajuste de alineación horizontal para las opciones dentro de Roles */
+    form div div {
+        flex-direction: row !important;
+        align-items: center !important;
+        margin-bottom: 10px !important;
+        width: 100% !important;
+    }
+
+    form div div label {
+        margin-bottom: 0 !important;
+        font-family: 'sans-serif' !important;
+        font-size: 0.85rem !important;
+        font-weight: 600 !important;
+        text-transform: none !important;
+        letter-spacing: 0 !important;
+        display: inline-block !important;
+    }
+
+    /* Ocultar la opción de Administrador del sistema */
+    form div div:has(input[value="ROLE_ADMIN"]),
+    form input[value="ROLE_ADMIN"], 
+    form input[value="ROLE_ADMIN"] + label {
+        display: none !important;
+    }
+
+    /* BOTÓN ROJO POTENTE */
     .btn-gym {
         background-color: #ff0000 !important;
-        color: #000 !important;
-        border: none;
-        border-radius: 10px;
-        font-weight: 900;
+        color: #ffffff !important;
+        border: none !important;
+        border-radius: 10px !important;
+        font-weight: 800 !important;
         text-transform: uppercase;
         width: 100%;
-        padding: 12px;
-        margin-top: 10px;
+        padding: 15px !important;
+        margin-top: 15px;
+        font-size: 1rem;
+        letter-spacing: 0.5px;
         cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
+    }
+
+    .btn-gym:hover {
+        background-color: #ff0000 !important;
+        transform: translateY(-2px);
+        box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
     }
 
     .footer-links {
         text-align: center;
-        margin-top: 20px;
-        font-size: 0.75rem;
+        margin-top: 25px;
+        font-size: 0.85rem;
     }
 </style>
 
@@ -101,20 +191,66 @@
     </div>
 
     <div class="card card-gym shadow-lg">
-        <h2 class="card-title">Nuevo Miembro</h2>
+        <h2 class="card-title">Nuevo <span style="color: #ff0000;">Miembro</span></h2>
         
         {{ form_start(form) }}
-            {{ form_widget(form) }}
-            <button class="btn btn-gym">
+            
+            {# 
+               Renderizado dinámico ultra seguro: Pinta todos los campos con sus nombres reales internos.
+               Esto evita para siempre errores de "propiedad no encontrada".
+            #}
+            {% for campo in form %}
+                {% if campo.vars.name != '_token' and campo.vars.name != 'roles' %}
+                    {{ form_row(campo) }}
+                {% endif %}
+            {% endfor %}
+
+            <div class="form-group-gym" style="margin-bottom: 20px;">
+                <label>Selecciona tu gimnasio</label>
+                <select name="gimnasio" required>
+                    <option value="" disabled selected>Elige un centro GymTrack...</option>
+                    <option value="centro_central">GymTrack Central</option>
+                    <option value="centro_norte">GymTrack Norte</option>
+                    <option value="centro_sur">GymTrack Sur</option>
+                </select>
+            </div>
+
+            {# Volvemos a pintar el bloque de roles aislado al final para aplicar la estética estructurada #}
+            {% if form.roles is defined %}
+                <div class="form-group-gym">
+                    {{ form_label(form.roles, 'Nivel de acceso (Roles)') }}
+                    <div style="background-color: rgba(0,0,0,0.4); border: 2px solid #222; border-radius: 12px; padding: 15px; width: 100%; box-sizing: border-box;">
+                        {{ form_widget(form.roles) }}
+                    </div>
+                </div>
+            {% endif %}
+
+            {# Procesa los tokens de seguridad internos obligatorios #}
+            {{ form_rest(form) }}
+
+            <button class="btn btn-gym" type="submit">
                 CREAR CUENTA
             </button>
         {{ form_end(form) }}
 
         <div class="footer-links">
-            <a href="{{ path('app_login') }}" style="color: #666; text-decoration: none;">
-                ¿Ya eres socio? <span style="color: #ff0000; text-decoration: underline;">Inicia sesión</span>
+            <a href="{{ path('app_login') }}" style="color: #aaaaaa; text-decoration: none; font-weight: 600;">
+                ¿Ya eres socio? <span style="color: #ff3333; font-weight: 800; text-decoration: underline;">Inicia sesión</span>
             </a>
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const opcionesRoles = document.querySelectorAll('form div div, form div');
+        opcionesRoles.forEach(el => {
+            if (el.textContent.includes("ADMINISTRADOR") || el.textContent.includes("Administrador")) {
+                if(el.innerHTML.includes('checkbox') || el.innerHTML.includes('input')) {
+                    el.style.setProperty('display', 'none', 'important');
+                }
+            }
+        });
+    });
+</script>
 {% endblock %}
